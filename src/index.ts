@@ -1,8 +1,8 @@
-import { PlantController } from './modules/plant/plant.controller.js'
+import { AppController } from './modules/app/app.controller.js'
 
 window.onload = () => {
     function App() {
-        const plantController = new PlantController()
+        const appController = new AppController()
     }
 
     App()

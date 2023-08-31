@@ -1,5 +1,5 @@
+import { ModelSchema } from '../../common/repository.js'
 import {
-    ModelSchema,
     CreateArgs,
     CreateManyArgs,
     DeleteArgs,

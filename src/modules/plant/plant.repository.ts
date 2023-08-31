@@ -9,6 +9,8 @@ import {
     FindIndexArgs,
     FindManyArgs,
     FindManyIndexArgs,
+    UpdateArgs,
+    UpdateManyArgs,
     Document,
 } from './../../lib/repository-memory/index.js'
 import { PlantModel } from './plant.model.js'
@@ -22,6 +24,8 @@ export type PlantFindFirstArgs = FindFirstArgs<Document<PlantModel>>
 export type PlantFindIndexArgs = FindIndexArgs<Document<PlantModel>>
 export type PlantFindManyArgs = FindManyArgs<Document<PlantModel>>
 export type PlantFindManyIndexArgs = FindManyIndexArgs<Document<PlantModel>>
+export type PlantUpdateArgs = UpdateArgs<Document<PlantModel>>
+export type PlantUpdateManyArgs = UpdateManyArgs<Document<PlantModel>>
 
 export class PlantRepository extends ModelSchema<PlantModel> {
     constructor() {

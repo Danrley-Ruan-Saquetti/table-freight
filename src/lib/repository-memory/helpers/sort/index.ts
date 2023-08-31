@@ -1,4 +1,4 @@
-import { Constants, Types } from '..'
+import { Constants, Types } from '../index.js'
 
 export function sortDocuments<M extends Types.DocumentDefaultArgs>(documents: Types.Document<M>[], args: Types.OrderByArgs<Types.Document<M>>[]) {
     return documents.sort((doc1, doc2) => {

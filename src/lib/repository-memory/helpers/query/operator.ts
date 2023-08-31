@@ -1,9 +1,9 @@
-import { OperatorsProps, RelationOperatorByType } from '../constants'
-import { OperatorStringFunctions } from './operator.string'
-import { OperatorNumberFunctions } from './operator.number'
-import { OperatorBooleanFunctions } from './operator.boolean'
-import { OperatorDateFunctions } from './operator.date'
-import { OperatorArrayFunctions } from './operator.array'
+import { OperatorsProps, RelationOperatorByType } from '../constants.js'
+import { OperatorStringFunctions } from './operator.string.js'
+import { OperatorNumberFunctions } from './operator.number.js'
+import { OperatorBooleanFunctions } from './operator.boolean.js'
+import { OperatorDateFunctions } from './operator.date.js'
+import { OperatorArrayFunctions } from './operator.array.js'
 
 export type StringFilter = {
     equals: string

@@ -1,3 +1,3 @@
-export * from './repository'
-export * from './model'
-export * from './helpers/types.model'
+export * from './repository.js'
+export * from './model.js'
+export * from './helpers/types.model.js'

@@ -1,7 +1,7 @@
-import { Types, validQueryToDocument } from './helpers'
-import { createDocument } from './helpers/create'
-import { limitDocumentsResult } from './helpers/limit'
-import { sortDocuments } from './helpers/sort'
+import { Types, validQueryToDocument } from './helpers/index.js'
+import { createDocument } from './helpers/create/index.js'
+import { limitDocumentsResult } from './helpers/limit/index.js'
+import { sortDocuments } from './helpers/sort/index.js'
 import {
     CreateManyResponse,
     CreateResponse,
@@ -13,8 +13,8 @@ import {
     FindManyResponse,
     UpdateManyResponse,
     UpdateResponse,
-} from './helpers/types.model'
-import { deepClone, deepMerge } from './util'
+} from './helpers/types.model.js'
+import { deepClone, deepMerge } from './util/index.js'
 
 export class Repository {
     private models: Types.ModelsRepository

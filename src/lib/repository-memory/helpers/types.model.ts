@@ -1,6 +1,6 @@
-import { PartialDeep } from '../util'
-import { Operators, OperatorsProps, OrderBy, RelationOperatorByType } from './constants'
-import { ArrayFilter, BooleanFilter, DateFilter, DefaultFilter, NumberFilter, StringFilter } from './query'
+import { PartialDeep } from '../util/index.js'
+import { Operators, OperatorsProps, OrderBy, RelationOperatorByType } from './constants.js'
+import { ArrayFilter, BooleanFilter, DateFilter, DefaultFilter, NumberFilter, StringFilter } from './query/index.js'
 
 type ReplaceTypeValueOfObjet<O extends object, V> = { [x in keyof O]: O[x] extends Date ? V : O[x] extends object ? ReplaceTypeValueOfObjet<O[x], V> : V }
 type ExtractPropsInPayload<O extends object, V> = { [x in keyof O]?: O[x] extends Date ? V : O[x] extends object ? ExtractPropsInPayload<O[x], V> | V : V }
@@ -52,12 +52,12 @@ export type SelectArgs<M extends Document> = PartialDeep<ExtractPropsInPayload<M
 
 export type FindDefaultModelArgs<M extends object> = {
     [x in keyof M]: M[x] extends Array<any>
-    ? Partial<GetTypeOperatorByType<M[x]>>
-    : M[x] extends Date
-    ? Partial<GetTypeOperatorByType<M[x]>>
-    : M[x] extends object
-    ? FindDefaultModelArgs<M[x]>
-    : Partial<GetTypeOperatorByType<M[x]>>
+        ? Partial<GetTypeOperatorByType<M[x]>>
+        : M[x] extends Date
+        ? Partial<GetTypeOperatorByType<M[x]>>
+        : M[x] extends object
+        ? FindDefaultModelArgs<M[x]>
+        : Partial<GetTypeOperatorByType<M[x]>>
 }
 export type FindOperatorsArgs<M extends Document> = FindDefaultArgs<M>[]
 export type FindDefaultArgs<M extends Document> = PartialDeep<FindDefaultModelArgs<M>> & { [x in OperatorsType]?: FindOperatorsArgs<M> }

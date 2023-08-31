@@ -1,4 +1,4 @@
-import { RelationOperatorByType } from '../constants'
+import { RelationOperatorByType } from '../constants.js'
 
 export class OperatorDateFunctions {
     static readonly OPERATORS_FUNCTION: Partial<{ [x in keyof (typeof RelationOperatorByType)['Date']]?: (value: any, valueOperator: any) => boolean }> = {

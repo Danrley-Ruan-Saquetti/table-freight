@@ -1,3 +1,3 @@
-export * from './deep-clone'
-export * from './deep-merge'
-export * from './types'
+export * from './deep-clone.js'
+export * from './deep-merge.js'
+export * from './types.js'

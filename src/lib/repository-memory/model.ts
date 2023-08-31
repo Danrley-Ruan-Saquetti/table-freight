@@ -1,5 +1,5 @@
-import { Repository } from './repository'
-import { Types } from './helpers'
+import { Repository } from './repository.js'
+import { Types } from './helpers/index.js'
 
 export type ModelSchemaOptions = {
     isolated?: boolean

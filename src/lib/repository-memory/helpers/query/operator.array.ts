@@ -1,4 +1,4 @@
-import { RelationOperatorByType } from '../constants'
+import { RelationOperatorByType } from '../constants.js'
 
 export class OperatorArrayFunctions {
     static readonly OPERATORS_FUNCTION: Partial<{ [x in keyof (typeof RelationOperatorByType)['Array']]?: (value: any, valueOperator: any) => boolean }> = {

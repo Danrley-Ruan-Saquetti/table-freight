@@ -1,7 +1,7 @@
-export * from './operator'
-import { Constants, Types } from '..'
-import { OperatorsProps } from '../constants'
-import { performOperatorProp } from './operator'
+export * from './operator.js'
+import { Constants, Types } from '../index.js'
+import { OperatorsProps } from '../constants.js'
+import { performOperatorProp } from './operator.js'
 
 export function validQueryToDocument<M extends Types.DocumentDefaultArgs>(doc: Types.Document<M>, args: Types.FindDefaultArgs<Types.Document<M>>) {
     if (typeof args == 'object') {

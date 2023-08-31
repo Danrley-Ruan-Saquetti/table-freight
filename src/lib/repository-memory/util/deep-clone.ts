@@ -4,7 +4,7 @@ export function deepClone<T = any>(obj: T, hash = new WeakMap()): T {
     }
 
     if (obj instanceof Date) {
-        return new Date(obj) as T
+        return new Date(obj) as any
     }
 
     if (isClass(obj)) {

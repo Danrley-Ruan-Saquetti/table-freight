@@ -1,1 +1,5 @@
-function App() {}
+window.onload = () => {
+    function App() {}
+
+    App()
+}

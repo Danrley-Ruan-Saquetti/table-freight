@@ -1,0 +1,24 @@
+{
+  "name": "table-freight",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start:dev": "live-server",
+    "build:dev": "tsc --watch"
+  },
+  "keywords": [],
+  "author": "Dan Ruan <danrsaquetti@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "live-server": "^1.2.2",
+    "prettier": "^2.8.8",
+    "typescript": "^5.2.2"
+  }
+}

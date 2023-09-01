@@ -49,6 +49,10 @@ export class PlantController {
         return this.repository.findMany(args).map(plant => Plant.instanceOf(plant))
     }
 
+    findBydIds(ids: number[]) {
+        return this.repository.findBydIds(ids).map(plant => Plant.instanceOf(plant))
+    }
+
     findFirst(args: PlantFindFirstArgs) {
         const plant = this.repository.findFirst(args)
 

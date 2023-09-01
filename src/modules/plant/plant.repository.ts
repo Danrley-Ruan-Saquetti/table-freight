@@ -29,6 +29,14 @@ export type PlantUpdateManyArgs = UpdateManyArgs<Document<PlantModel>>
 
 export class PlantRepository extends ModelSchema<PlantModel> {
     constructor() {
-        super('_Plants')
+        super('Plant')
+    }
+
+    findBydIds(ids: number[]) {
+        return this.findMany({
+            where: {
+                OR: ids.map(id => ({ id: { equals: id } }))
+            }
+        })
     }
 }

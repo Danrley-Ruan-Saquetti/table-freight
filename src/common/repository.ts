@@ -2,6 +2,6 @@ import { ModelSchema as ModelSchemaAbstract } from '../lib/repository-memory/ind
 
 export class ModelSchema<T extends object = any> extends ModelSchemaAbstract<T> {
     constructor(name: string) {
-        super(name, { isolated: true })
+        super(name)
     }
 }

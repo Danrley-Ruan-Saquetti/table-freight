@@ -13,21 +13,21 @@ import {
     UpdateManyArgs,
     Document,
 } from './../../lib/repository-memory/index.js'
-import { PlantModel } from './plant.model.js'
+import { PlantModelArgs } from './plant.model.js'
 
-export type PlantCreateArgs = CreateArgs<PlantModel>
-export type PlantCreateManyArgs = CreateManyArgs<PlantModel>
-export type PlantDeleteArgs = DeleteArgs<PlantModel>
-export type PlantDeleteManyArgs = DeleteManyArgs<PlantModel>
-export type PlantFindArgs = FindArgs<Document<PlantModel>>
-export type PlantFindFirstArgs = FindFirstArgs<Document<PlantModel>>
-export type PlantFindIndexArgs = FindIndexArgs<Document<PlantModel>>
-export type PlantFindManyArgs = FindManyArgs<Document<PlantModel>>
-export type PlantFindManyIndexArgs = FindManyIndexArgs<Document<PlantModel>>
-export type PlantUpdateArgs = UpdateArgs<Document<PlantModel>>
-export type PlantUpdateManyArgs = UpdateManyArgs<Document<PlantModel>>
+export type PlantCreateArgs = CreateArgs<PlantModelArgs>
+export type PlantCreateManyArgs = CreateManyArgs<PlantModelArgs>
+export type PlantDeleteArgs = DeleteArgs<PlantModelArgs>
+export type PlantDeleteManyArgs = DeleteManyArgs<PlantModelArgs>
+export type PlantFindArgs = FindArgs<Document<PlantModelArgs>>
+export type PlantFindFirstArgs = FindFirstArgs<Document<PlantModelArgs>>
+export type PlantFindIndexArgs = FindIndexArgs<Document<PlantModelArgs>>
+export type PlantFindManyArgs = FindManyArgs<Document<PlantModelArgs>>
+export type PlantFindManyIndexArgs = FindManyIndexArgs<Document<PlantModelArgs>>
+export type PlantUpdateArgs = UpdateArgs<Document<PlantModelArgs>>
+export type PlantUpdateManyArgs = UpdateManyArgs<Document<PlantModelArgs>>
 
-export class PlantRepository extends ModelSchema<PlantModel> {
+export class PlantRepository extends ModelSchema<PlantModelArgs> {
     constructor() {
         super('Plant')
     }

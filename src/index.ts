@@ -19,30 +19,35 @@ window.onload = () => {
         const tableDeadline = tableController.converterStringInTable(TABLE_CONTENT_DEADLINE)
         const tableFreight = tableController.converterStringInTable(TABLE_CONTENT_FREIGHT)
 
-        const { id: farmId } = farmController.createFarm([
-            {
-                table: tableDeadline,
-                name: 'Plant Deadline',
-                type: PlantType.Deadline,
-                headers: [
-                    { name: 'PRAZO', column: 2, type: HeaderType.Deadline },
-                    { name: 'CEP FINAL', column: 1, type: HeaderType.CepFinal },
-                    { name: 'CEP INICIAL', column: 0, type: HeaderType.CepInitial },
-                    { name: 'CS', column: 3, type: HeaderType.CriteriaSelection },
-                ]
-            },
-            {
-                table: tableFreight,
-                name: 'Plant Freight',
-                type: PlantType.Price,
-                headers: [
-                    { name: 'EXCESS', column: 1, type: HeaderType.Excess },
-                    { name: 'CS', column: 0, type: HeaderType.CriteriaSelection },
-                ]
-            }
-        ])
+        const farmService = farmController.createFarm({
+            name: 'Farm - Test',
+            plants: [
+                {
+                    table: tableDeadline,
+                    name: 'Plant Deadline',
+                    type: PlantType.Deadline,
+                    headers: [
+                        { name: 'PRAZO', column: 2, type: HeaderType.Deadline },
+                        { name: 'CEP FINAL', column: 1, type: HeaderType.CepFinal },
+                        { name: 'CEP INICIAL', column: 0, type: HeaderType.CepInitial },
+                        { name: 'CS', column: 3, type: HeaderType.CriteriaSelection },
+                    ]
+                },
+                {
+                    table: tableFreight,
+                    name: 'Plant Freight',
+                    type: PlantType.Price,
+                    headers: [
+                        { name: 'EXCESS', column: 1, type: HeaderType.Excess },
+                        { name: 'CS', column: 0, type: HeaderType.CriteriaSelection },
+                    ]
+                }
+            ]
+        })
 
-        console.log(farmController.findFirstIncludeTables({ where: { id: { equals: farmId } } }))
+        farmService.perform()
+
+        console.log(farmController.findFirstIncludeTables({ where: { id: { equals: farmService.farmId } } }))
     }
 
     document.querySelector('button[data-button="get-data"]')?.addEventListener('click', getDataRepository)

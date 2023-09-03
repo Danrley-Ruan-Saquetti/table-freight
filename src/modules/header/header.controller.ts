@@ -1,4 +1,3 @@
-import { Header } from './header.model.js'
 import {
     HeaderRepository,
     HeaderCreateArgs,
@@ -22,11 +21,11 @@ export class HeaderController {
 
     // Repository
     create(args: HeaderCreateArgs) {
-        return Header.instance(this.repository.create(args))
+        return this.repository.create(args)
     }
 
     createMany(args: HeaderCreateManyArgs) {
-        return this.repository.createMany(args).map(header => Header.instance(header))
+        return this.repository.createMany(args)
     }
 
     update(args: HeaderUpdateArgs) {
@@ -46,13 +45,13 @@ export class HeaderController {
     }
 
     findMany(args?: HeaderFindManyArgs) {
-        return this.repository.findMany({ orderBy: { column: 'ASC' }, ...args }).map(header => Header.instance(header))
+        return this.repository.findMany({ orderBy: { column: 'ASC' }, ...args })
     }
 
     findFirst(args: HeaderFindFirstArgs) {
         const header = this.repository.findFirst(args)
 
-        return !header ? header : Header.instance(header)
+        return header
     }
 
     findIndex(args: HeaderFindIndexArgs) {

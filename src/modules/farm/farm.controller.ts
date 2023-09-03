@@ -2,7 +2,6 @@ import { HeaderController } from '../header/header.controller.js'
 import { HeaderModelArgs } from '../header/header.model.js'
 import { PlantController } from '../plant/plant.controller.js'
 import { PlantModelArgs } from '../plant/plant.model.js'
-import { Farm } from './farm.model.js'
 import {
     FarmRepository,
     FarmCreateArgs,
@@ -16,6 +15,8 @@ import {
     FarmUpdateArgs,
     FarmUpdateManyArgs,
 } from './farm.repository.js'
+import { FarmService } from './farm.service.js'
+import { FarmModelArgs } from './farm.model.js'
 
 export class FarmController {
     private readonly repository: FarmRepository
@@ -29,23 +30,23 @@ export class FarmController {
     }
 
     // Use Case
-    createFarm(plants: (Omit<PlantModelArgs, 'farmId'> & { headers: Omit<HeaderModelArgs, 'tableId'>[] })[]) {
-        const farm = this.create({ data: {} })
+    createFarm({ plants, name }: FarmModelArgs & { plants: (Omit<PlantModelArgs, 'farmId'> & { headers: Omit<HeaderModelArgs, 'tableId'>[] })[] }) {
+        const farm = this.create({ data: { name } })
 
-        const a = plants.map(plantArg => {
+        plants.map(plantArg => {
             this.plantController.createPlant({ ...plantArg, farmId: farm.id })
         })
 
-        return farm
+        return new FarmService(farm.id)
     }
 
     // Repository
     create(args: FarmCreateArgs) {
-        return Farm.instance(this.repository.create(args))
+        return this.repository.create(args)
     }
 
     createMany(args: FarmCreateManyArgs) {
-        return this.repository.createMany(args).map(farm => Farm.instance(farm))
+        return this.repository.createMany(args)
     }
 
     update(args: FarmUpdateArgs) {
@@ -65,7 +66,7 @@ export class FarmController {
     }
 
     findMany(args: FarmFindManyArgs) {
-        return this.repository.findMany(args).map(farm => Farm.instance(farm))
+        return this.repository.findMany(args)
     }
 
     findFirstIncludeTables(args: FarmFindFirstArgs) {
@@ -79,7 +80,7 @@ export class FarmController {
     findFirst(args: FarmFindFirstArgs) {
         const farm = this.repository.findFirst(args)
 
-        return !farm ? farm : Farm.instance(farm)
+        return farm
     }
 
     findIndex(args: FarmFindIndexArgs) {

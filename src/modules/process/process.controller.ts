@@ -1,3 +1,4 @@
+import { Process } from './process.model.js'
 import {
     ProcessRepository,
     ProcessCreateArgs,
@@ -10,7 +11,7 @@ import {
     ProcessFindManyIndexArgs,
     ProcessUpdateArgs,
     ProcessUpdateManyArgs
-} from './process.repository'
+} from './process.repository.js'
 
 export class ProcessController {
     private readonly repository: ProcessRepository
@@ -45,10 +46,7 @@ export class ProcessController {
     }
 
     findMany(args?: ProcessFindManyArgs) {
-        return this.repository.findMany({
-            orderBy: { column: 'ASC' },
-            ...args
-        })
+        return this.repository.findMany({ orderBy: { order: 'ASC' }, ...args }).map(process => new Process(process))
     }
 
     findFirst(args: ProcessFindFirstArgs) {

@@ -1,8 +1,8 @@
 import { Document } from '../../lib/repository-memory'
 
 export enum HeaderType {
-    CepInitial = 'CepInitial',
-    CepFinal = 'CepFinal',
+    ZipCodeInitial = 'ZipCodeInitial',
+    ZipCodeFinal = 'ZipCodeFinal',
     Deadline = 'Deadline',
     CriteriaSelection = 'CriteriaSelection',
     Excess = 'Excess',

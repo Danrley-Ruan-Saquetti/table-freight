@@ -1,20 +1,12 @@
+import { ModelSchema } from './common/repository.js'
 import { FarmController } from './modules/farm/farm.controller.js'
-import { FarmRepository } from './modules/farm/farm.repository.js'
 import { EnumProcess } from './modules/farm/process/index.js'
 import { HeaderType } from './modules/header/header.model.js'
-import { HeaderRepository } from './modules/header/header.repository.js'
 import { PlantType } from './modules/plant/plant.model.js'
-import { PlantRepository } from './modules/plant/plant.repository.js'
-import { ProcessRepository } from './modules/process/process.repository.js'
 import { TableController } from './modules/table/table.controller.js'
 import { TABLE_CONTENT_DEADLINE, TABLE_CONTENT_FREIGHT } from './test/table.js'
 
 window.onload = () => {
-    const plantRepository = new PlantRepository()
-    const farmRepository = new FarmRepository()
-    const headerRepository = new HeaderRepository()
-    const processRepository = new ProcessRepository()
-
     function App() {
         const tableController = new TableController()
         const farmController = new FarmController()
@@ -62,10 +54,7 @@ window.onload = () => {
     document.querySelector('button[data-button="get-data"]')?.addEventListener('click', getDataRepository)
 
     function getDataRepository() {
-        console.log(plantRepository.findMany())
-        console.log(farmRepository.findMany())
-        console.log(headerRepository.findMany())
-        console.log(processRepository.findMany())
+        console.log(Object.keys(ModelSchema.repository.models).map(key => ({ model: key, documents: ModelSchema.repository.models[key].documents })))
     }
 
     App()

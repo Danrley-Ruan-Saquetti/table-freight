@@ -6,7 +6,7 @@ export type ModelSchemaOptions = {
 }
 
 export class ModelSchema<ModelType extends Types.DocumentDefaultArgs = {}> {
-    protected static readonly repository = new Repository()
+     static readonly repository = new Repository()
     protected readonly repositoryIsolated?: Repository
 
     constructor(public readonly name: string, public options?: ModelSchemaOptions) {

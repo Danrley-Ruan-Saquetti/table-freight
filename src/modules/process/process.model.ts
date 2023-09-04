@@ -16,6 +16,7 @@ export type ProcessCreate = Omit<ProcessModel, 'params' | 'result' | 'createAt' 
     createAt?: Date
     id?: number
     updateAt?: Date
+    result?: Result<T>
 }
 export type ProcessChildrenCreate = Omit<ProcessModel, 'params' | 'result' | 'createAt' | 'id' | 'updateAt' | 'order'> & {
     params?: any[]
@@ -34,12 +35,12 @@ export class Process<T = any> implements ProcessModel<T> {
     id: number
     updateAt: Date
 
-    constructor({ farmId, type, order, params = [], createAt, id, updateAt }: ProcessCreate) {
+    constructor({ farmId, type, order, params = [], createAt, id, updateAt, result }: ProcessCreate) {
         this.farmId = farmId
         this.type = type
         this.order = order
         this.params = params
-        this.result = Result.failure({ title: 'Result Process', message: 'Process not finalized' })
+        this.result = result || Result.failure({ title: 'Result Process', message: 'Process not finalized' })
         // @ts-expect-error
         this.id = id
         // @ts-expect-error

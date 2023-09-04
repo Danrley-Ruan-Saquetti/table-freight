@@ -89,11 +89,15 @@ export class FarmService {
 
     // # Utils
     getState() {
-        return this.farmController.findFirstIncludeAll({ where: { id: { equals: this.farmId } } })
+        return { farm: this.getFarm(), plants: this.getPlants(), process: this.getProcess() }
+    }
+
+    getFarm() {
+        return this.farmController.findFirst({ where: { id: { equals: this.farmId } } })
     }
 
     getPlants() {
-        return this.plantController.findMany({ where: { farmId: { equals: this.farmId } } })
+        return this.plantController.findManyIncludeHeaders({ where: { farmId: { equals: this.farmId } } })
     }
 
     getProcess() {

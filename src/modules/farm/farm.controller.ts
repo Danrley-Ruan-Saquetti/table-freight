@@ -90,20 +90,6 @@ export class FarmController {
         return this.repository.findMany(args)
     }
 
-    findFirstIncludeAll(args: FarmFindFirstArgs) {
-        const farm = this.findFirst(args)
-
-        if (!farm) {
-            return null
-        }
-
-        return {
-            ...farm,
-            tables: this.plantController.findManyIncludeHeaders({ where: { farmId: { equals: farm.id } } }),
-            process: this.processController.findMany({ where: { farmId: { equals: farm.id } } }),
-        }
-    }
-
     findFirst(args: FarmFindFirstArgs) {
         const farm = this.repository.findFirst(args)
 

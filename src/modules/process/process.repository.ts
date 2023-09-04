@@ -13,19 +13,19 @@ import {
     UpdateManyArgs,
     Document,
 } from './../../lib/repository-memory/index.js'
-import { ProcessModel } from './process.model.js'
+import { ProcessModelArgs } from './process.model.js'
 
-export type ProcessCreateArgs = CreateArgs<ProcessModel>
-export type ProcessCreateManyArgs = CreateManyArgs<ProcessModel>
-export type ProcessDeleteArgs = DeleteArgs<ProcessModel>
-export type ProcessDeleteManyArgs = DeleteManyArgs<ProcessModel>
-export type ProcessFindArgs = FindArgs<Document<ProcessModel>>
-export type ProcessFindFirstArgs = FindFirstArgs<Document<ProcessModel>>
-export type ProcessFindIndexArgs = FindIndexArgs<Document<ProcessModel>>
-export type ProcessFindManyArgs = FindManyArgs<Document<ProcessModel>>
-export type ProcessFindManyIndexArgs = FindManyIndexArgs<Document<ProcessModel>>
-export type ProcessUpdateArgs = UpdateArgs<Document<ProcessModel>>
-export type ProcessUpdateManyArgs = UpdateManyArgs<Document<ProcessModel>>
+export type ProcessCreateArgs = CreateArgs<ProcessModelArgs>
+export type ProcessCreateManyArgs = CreateManyArgs<ProcessModelArgs>
+export type ProcessDeleteArgs = DeleteArgs<ProcessModelArgs>
+export type ProcessDeleteManyArgs = DeleteManyArgs<ProcessModelArgs>
+export type ProcessFindArgs = FindArgs<Document<ProcessModelArgs>>
+export type ProcessFindFirstArgs = FindFirstArgs<Document<ProcessModelArgs>>
+export type ProcessFindIndexArgs = FindIndexArgs<Document<ProcessModelArgs>>
+export type ProcessFindManyArgs = FindManyArgs<Document<ProcessModelArgs>>
+export type ProcessFindManyIndexArgs = FindManyIndexArgs<Document<ProcessModelArgs>>
+export type ProcessUpdateArgs = UpdateArgs<Document<ProcessModelArgs>>
+export type ProcessUpdateManyArgs = UpdateManyArgs<Document<ProcessModelArgs>>
 
 export class ProcessRepository extends ModelSchema {
     constructor() {

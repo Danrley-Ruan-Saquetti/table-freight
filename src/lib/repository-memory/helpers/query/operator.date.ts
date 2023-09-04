@@ -71,8 +71,6 @@ export class OperatorDateFunctions {
                 args[0] = new Date(args[0])
                 args[1] = new Date(args[1])
 
-                console.log(args)
-
                 const result = originalMethod.apply(this, args)
 
                 return result

@@ -34,14 +34,31 @@ export class FarmController {
     }
 
     // Use Case
-    createFarm({ plants = [], name, tactics = [] }: FarmModelArgs & { plants?: (Omit<PlantModelArgs, 'farmId'> & { headers: Omit<HeaderModelArgs, 'tableId'>[] })[], tactics?: EnumProcess[] }) {
+    createFarm({
+        plants = [],
+        name,
+        process = [],
+    }: FarmModelArgs & {
+        plants?: (Omit<PlantModelArgs, 'farmId'> & { headers: Omit<HeaderModelArgs, 'tableId'>[] })[]
+        process?: { type: EnumProcess; params?: any[] }[]
+    }) {
         const farm = this.create({ data: { name } })
         const farmService = new FarmService(farm.id)
 
         farmService.insertPlant(...plants)
-        farmService.insertServices(...tactics)
+        farmService.insertProcess(...process)
 
         return farmService
+    }
+
+    getFarm(farmId: number) {
+        const farm = this.findFirst({ where: { id: { equals: farmId } } })
+
+        if (!farm) {
+            return null
+        }
+
+        return new FarmService(farm.id)
     }
 
     // Repository
@@ -76,9 +93,15 @@ export class FarmController {
     findFirstIncludeAll(args: FarmFindFirstArgs) {
         const farm = this.findFirst(args)
 
-        if (!farm) { return null }
+        if (!farm) {
+            return null
+        }
 
-        return { ...farm, tables: this.plantController.findManyIncludeHeaders({ where: { farmId: { equals: farm.id } } }), process: this.processController.findMany({ where: { farmId: { equals: farm.id } } }) }
+        return {
+            ...farm,
+            tables: this.plantController.findManyIncludeHeaders({ where: { farmId: { equals: farm.id } } }),
+            process: this.processController.findMany({ where: { farmId: { equals: farm.id } } }),
+        }
     }
 
     findFirst(args: FarmFindFirstArgs) {

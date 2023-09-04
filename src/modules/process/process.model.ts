@@ -1,24 +1,54 @@
+import { Document } from '../../lib/repository-memory/index.js'
 import { Result } from '../../lib/result/index.js'
 import { EnumProcess } from '../farm/process/index.js'
 
-export type ProcessModel = {
+export type ProcessModelArgs<T = any> = {
     farmId: number
     type: EnumProcess
     order: number
+    params: any[]
+    result: Result<T>
 }
 
-export class Process<T = any> implements ProcessModel {
-    public farmId: number
-    public type: EnumProcess
-    public order: number
+export type ProcessModel<T = any> = Document<ProcessModelArgs<T>>
+export type ProcessCreate = Omit<ProcessModel, 'params' | 'result' | 'createAt' | 'id' | 'updateAt'> & {
+    params?: any[]
+    createAt?: Date
+    id?: number
+    updateAt?: Date
+}
+export type ProcessChildrenCreate = Omit<ProcessModel, 'params' | 'result' | 'createAt' | 'id' | 'updateAt' | 'order'> & {
+    params?: any[]
+    createAt?: Date
+    id?: number
+    updateAt?: Date
+}
 
-    constructor({ farmId, type, order }: ProcessModel) {
+export class Process<T = any> implements ProcessModel<T> {
+    farmId: number
+    type: EnumProcess
+    order: number
+    params: any[]
+    result: Result<T>
+    createAt: Date
+    id: number
+    updateAt: Date
+
+    constructor({ farmId, type, order, params = [], createAt, id, updateAt }: ProcessCreate) {
         this.farmId = farmId
         this.type = type
         this.order = order
+        this.params = params
+        this.result = Result.failure({ title: 'Result Process', message: 'Process not finalized' })
+        // @ts-expect-error
+        this.id = id
+        // @ts-expect-error
+        this.createAt = createAt
+        // @ts-expect-error
+        this.updateAt = updateAt
     }
 
-    perform(): Result<T> {
+    perform() {
         throw new Error('Method not implemented')
     }
 }

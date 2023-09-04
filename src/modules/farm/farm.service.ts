@@ -32,9 +32,9 @@ export class FarmService {
         this.initComponents()
 
         this.processService.map(process => {
-            const resultProcess = process.perform()
+            process.perform()
 
-            console.log(resultProcess)
+            console.log(process.result)
         })
     }
 
@@ -58,7 +58,13 @@ export class FarmService {
         this.processService.splice(0, this.processService.length)
 
         this.getProcess().map(process => {
-            const processService = new ProcessInstance[EnumProcess[process.type]](this.farmId)
+            const processInstance = ProcessInstance[EnumProcess[process.type]]
+
+            if (!processInstance) {
+                return
+            }
+
+            const processService = new processInstance(process)
 
             this.processService.push(processService)
         })
@@ -73,11 +79,11 @@ export class FarmService {
         })
     }
 
-    insertServices(...tactics: EnumProcess[]) {
-        tactics.map(process => {
-            const ProcessValue = ProcessInstance[process]
+    insertProcess(...process: { type: EnumProcess; params?: any[] }[]) {
+        process.map(pro => {
+            const ProcessValue = ProcessInstance[pro.type]
 
-            this.processController.create({ data: new ProcessValue(this.farmId) })
+            this.processController.create({ data: new ProcessValue({ ...pro, farmId: this.farmId }) })
         })
     }
 
@@ -86,11 +92,11 @@ export class FarmService {
         return this.farmController.findFirstIncludeAll({ where: { id: { equals: this.farmId } } })
     }
 
-    private getPlants() {
+    getPlants() {
         return this.plantController.findMany({ where: { farmId: { equals: this.farmId } } })
     }
 
-    private getProcess() {
+    getProcess() {
         return this.processController.findMany({ where: { farmId: { equals: this.farmId } } })
     }
 }

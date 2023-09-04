@@ -1,24 +1,23 @@
 import { Table } from '../../../@types/index.js'
-import { Document, FindFirstResponse, FindManyResponse } from '../../../lib/repository-memory/index.js'
+import { Document, FindManyResponse } from '../../../lib/repository-memory/index.js'
 import { Result } from '../../../lib/result/index.js'
 import { HeaderController } from '../../header/header.controller.js'
 import { HeaderModelArgs, HeaderType } from '../../header/header.model.js'
 import { PlantController } from '../../plant/plant.controller.js'
 import { PlantType } from '../../plant/plant.model.js'
-import { Process } from '../../process/process.model.js'
+import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
 import { TableController } from '../../table/table.controller.js'
-import { EnumProcess } from './index.js'
 
 export type PerformResult = { message: string }
 type TableModel = {
-    headers: FindManyResponse<HeaderModelArgs>;
-    name: string;
-    type: PlantType;
-    table: Table;
-    farmId: number;
-    id: number;
-    createAt: Date;
-    updateAt: Date;
+    headers: FindManyResponse<HeaderModelArgs>
+    name: string
+    type: PlantType
+    table: Table
+    farmId: number
+    id: number
+    createAt: Date
+    updateAt: Date
 }
 
 export class ValidZipCodeProcess extends Process<PerformResult> {
@@ -26,8 +25,8 @@ export class ValidZipCodeProcess extends Process<PerformResult> {
     private readonly tableController: TableController
     private readonly headerController: HeaderController
 
-    constructor(farmId: number) {
-        super({ farmId, type: EnumProcess.ValidZipCode, order: 1 })
+    constructor(args: ProcessChildrenCreate) {
+        super({ ...args, order: 2 })
 
         this.plantController = new PlantController()
         this.tableController = new TableController()
@@ -52,10 +51,18 @@ export class ValidZipCodeProcess extends Process<PerformResult> {
 
     private validPerform() {
         if (!this.getPlantDeadline()) {
-            throw Result.failure<PerformResult>({ title: 'Process: Validate Zip Code', message: 'Cannot validate zip code in plant deadline', causes: [{ message: '"Plant Deadline" not defined', origin: 'Plant Deadline' }] })
+            throw Result.failure<PerformResult>({
+                title: 'Process: Validate Zip Code',
+                message: 'Cannot validate zip code in plant deadline',
+                causes: [{ message: '"Plant Deadline" not defined', origin: 'Plant Deadline' }],
+            })
         }
         if (!this.getHeaderZipCodeInitialOfPlantDeadline()) {
-            throw Result.failure<PerformResult>({ title: 'Process: Validate Zip Code', message: 'Cannot order table deadline', causes: [{ message: '"Header Zip Code Initial" in plant Deadline not defined', origin: 'Header Zip Code Initial' }] })
+            throw Result.failure<PerformResult>({
+                title: 'Process: Validate Zip Code',
+                message: 'Cannot order table deadline',
+                causes: [{ message: '"Header Zip Code Initial" in plant Deadline not defined', origin: 'Header Zip Code Initial' }],
+            })
         }
     }
 
@@ -77,7 +84,8 @@ export class ValidZipCodeProcess extends Process<PerformResult> {
     private getHeaderZipCodeInitialOfPlantDeadline() {
         const tableDeadline = this.getPlantDeadline()
 
-        return this.headerController.findFirst({ where: { tableId: { equals: tableDeadline.id }, type: { equals: HeaderType.ZipCodeInitial } } }) as Document<HeaderModelArgs>
-
+        return this.headerController.findFirst({
+            where: { tableId: { equals: tableDeadline.id }, type: { equals: HeaderType.ZipCodeInitial } },
+        }) as Document<HeaderModelArgs>
     }
 }

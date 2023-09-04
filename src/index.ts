@@ -22,9 +22,15 @@ window.onload = () => {
         const tableDeadline = tableController.converterStringInTable(TABLE_CONTENT_DEADLINE)
         const tableFreight = tableController.converterStringInTable(TABLE_CONTENT_FREIGHT)
 
-        const farmService = farmController.createFarm({ name: 'Farm - Test' })
+        const { farmId } = farmController.createFarm({ name: 'Farm - Test' })
 
-        farmService.insertServices(EnumProcess.ValidZipCode)
+        const farmService = farmController.getFarm(farmId)
+
+        if (!farmService) {
+            return
+        }
+
+        farmService.insertProcess({ type: EnumProcess.OrderTable, params: [{ plantType: PlantType.Deadline, column: 0 }] })
         farmService.insertPlant(
             {
                 table: tableDeadline,
@@ -35,7 +41,7 @@ window.onload = () => {
                     { name: 'CEP FINAL', column: 1, type: HeaderType.ZipCodeFinal },
                     { name: 'PRAZO', column: 2, type: HeaderType.Deadline },
                     { name: 'CS', column: 3, type: HeaderType.CriteriaSelection },
-                ]
+                ],
             },
             {
                 table: tableFreight,
@@ -44,7 +50,7 @@ window.onload = () => {
                 headers: [
                     { name: 'CS', column: 0, type: HeaderType.CriteriaSelection },
                     { name: 'EXCESS', column: 1, type: HeaderType.Excess },
-                ]
+                ],
             }
         )
 

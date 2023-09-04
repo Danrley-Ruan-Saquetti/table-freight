@@ -22,7 +22,10 @@ window.onload = () => {
             return
         }
 
-        farmService.insertProcess({ type: EnumProcess.OrderTable, params: [{ plantType: PlantType.Deadline, column: 0 }] })
+        farmService.insertProcess(
+            { type: EnumProcess.OrderTable, params: [{ plantType: PlantType.Deadline, column: 0 }] },
+            { type: EnumProcess.ValidZipCodeContained, params: [{ plantType: PlantType.Deadline }] }
+        )
         farmService.insertPlant(
             {
                 table: tableDeadline,

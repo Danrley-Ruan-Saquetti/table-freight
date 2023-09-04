@@ -10,7 +10,7 @@ import {
     ProcessFindManyArgs,
     ProcessFindManyIndexArgs,
     ProcessUpdateArgs,
-    ProcessUpdateManyArgs
+    ProcessUpdateManyArgs,
 } from './process.repository.js'
 
 export class ProcessController {
@@ -19,6 +19,8 @@ export class ProcessController {
     constructor() {
         this.repository = new ProcessRepository()
     }
+
+    createProcess() {}
 
     // Repository
     create(args: ProcessCreateArgs) {
@@ -50,9 +52,7 @@ export class ProcessController {
     }
 
     findFirst(args: ProcessFindFirstArgs) {
-        const header = this.repository.findFirst(args)
-
-        return header
+        return this.repository.findFirst(args)
     }
 
     findIndex(args: ProcessFindIndexArgs) {

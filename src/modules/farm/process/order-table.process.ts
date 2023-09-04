@@ -46,7 +46,7 @@ export class OrderTableProcess extends Process<PerformResult> {
         } finally {
             this.processController.update({
                 where: { id: { equals: this.id } },
-                data: { result: { ...this.result } },
+                data: { result: this.result },
             })
         }
     }

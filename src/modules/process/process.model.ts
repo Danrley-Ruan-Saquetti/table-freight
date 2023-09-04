@@ -2,21 +2,21 @@ import { Document } from '../../lib/repository-memory/index.js'
 import { Result } from '../../lib/result/index.js'
 import { EnumProcess } from '../farm/process/index.js'
 
-export type ProcessModelArgs<T = any> = {
+export type ProcessModelArgs<ResultType = any, ParamsType = any> = {
     farmId: number
     type: EnumProcess
     order: number
-    params: any[]
-    result: Result<T>
+    params: ParamsType[]
+    result: Result<ResultType>
 }
 
-export type ProcessModel<T = any> = Document<ProcessModelArgs<T>>
-export type ProcessCreate = Omit<ProcessModel, 'params' | 'result' | 'createAt' | 'id' | 'updateAt'> & {
-    params?: any[]
+export type ProcessModel<ResultType = any, ParamsType = any> = Document<ProcessModelArgs<ResultType, ParamsType>>
+export type ProcessCreate<ResultType = any, ParamsType = any> = Omit<ProcessModel, 'params' | 'result' | 'createAt' | 'id' | 'updateAt'> & {
+    params?: ParamsType[]
     createAt?: Date
     id?: number
     updateAt?: Date
-    result?: Result<T>
+    result?: Result<ResultType>
 }
 export type ProcessChildrenCreate = Omit<ProcessModel, 'params' | 'result' | 'createAt' | 'id' | 'updateAt' | 'order'> & {
     params?: any[]
@@ -25,17 +25,17 @@ export type ProcessChildrenCreate = Omit<ProcessModel, 'params' | 'result' | 'cr
     updateAt?: Date
 }
 
-export class Process<T = any> implements ProcessModel<T> {
+export class Process<ResultType = any, ParamsType = any> implements ProcessModel<ResultType, ParamsType> {
     farmId: number
     type: EnumProcess
     order: number
-    params: any[]
-    result: Result<T>
+    params: ParamsType[]
+    result: Result<ResultType>
     createAt: Date
     id: number
     updateAt: Date
 
-    constructor({ farmId, type, order, params = [], createAt, id, updateAt, result }: ProcessCreate) {
+    constructor({ farmId, type, order, params = [], createAt, id, updateAt, result }: ProcessCreate<ResultType>) {
         this.farmId = farmId
         this.type = type
         this.order = order

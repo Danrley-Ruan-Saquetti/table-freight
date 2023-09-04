@@ -67,7 +67,19 @@ export class OrderTableProcess extends Process<PerformResult> {
                 })
             }
 
-            this.tableController.orderTableByColumn(plant.table, column)
+            const tableOrdered = this.tableController.orderTableByColumn(plant.table, column)
+
+            console.log(
+                tableOrdered.map(line => {
+                    console.log(line)
+                    return line
+                })
+            )
+
+            this.plantController.update({
+                where: { id: { equals: plant.id } },
+                data: { table: tableOrdered },
+            })
 
             return Result.success<{ message: string; plant: string }>({ message: `Table ${plant.name} ordered successfully`, plant: plant.name })
         })

@@ -33,8 +33,6 @@ export class FarmService {
 
         this.processService.map(process => {
             process.perform()
-
-            console.log(process.result)
         })
     }
 

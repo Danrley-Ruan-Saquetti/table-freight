@@ -69,13 +69,6 @@ export class OrderTableProcess extends Process<PerformResult> {
 
             const tableOrdered = this.tableController.orderTableByColumn(plant.table, column)
 
-            console.log(
-                tableOrdered.map(line => {
-                    console.log(line)
-                    return line
-                })
-            )
-
             this.plantController.update({
                 where: { id: { equals: plant.id } },
                 data: { table: tableOrdered },

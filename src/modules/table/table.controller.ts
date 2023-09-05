@@ -8,9 +8,19 @@ export class TableController {
             .map(line => line.split(columnSeparatorCharacter).map(col => col.trim()))
     }
 
-    orderTableByColumn(table: Table, column: number) {
-        const tableOrdered = [table[0], ...table.slice(1).sort((lineA, lineB) => Number(lineA[column]) - Number(lineB[column]))]
+    orderTableByColumn(table: Table, ...columns: number[]) {
+        return table.sort((lineA, lineB) => {
+            for (let i = 0; i < columns.length; i++) {
+                const column = columns[i]
 
-        return tableOrdered
+                const result = Number(lineA[column]) - Number(lineB[column])
+
+                if (result != 0) {
+                    return result
+                }
+            }
+
+            return -1
+        })
     }
 }

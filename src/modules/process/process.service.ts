@@ -1,5 +1,7 @@
 import { Result } from '../../lib/result/index.js'
+import { EnumProcess, ProcessInstance } from '../farm/process/index.js'
 import { ProcessController } from './process.controller.js'
+import { ProcessModel } from './process.model.js'
 
 export interface ProcessServiceModel {
     processId: number
@@ -19,7 +21,15 @@ export class ProcessService<ResultType = any, ParamsType = any> {
         let result: Result<ResultType>
 
         try {
-            result = this.action()
+            const process = this.getProcess()
+
+            const Instace = this.getProcessInstanceByType(process.type)
+
+            const processInstance = new Instace(process)
+
+            processInstance.perform()
+
+            result = processInstance.result
         } catch (err) {
             if (err instanceof Result) {
                 result = err as Result<ResultType>
@@ -34,7 +44,11 @@ export class ProcessService<ResultType = any, ParamsType = any> {
         })
     }
 
-    protected action(): Result<ResultType> {
-        throw new Error('Method not implemented')
+    protected getProcess() {
+        return this.processController.findFirst<ResultType, ParamsType>({ where: { id: { equals: this.processId } } }) as ProcessModel<ResultType, ParamsType>
+    }
+
+    protected getProcessInstanceByType(type: EnumProcess) {
+        return ProcessInstance[type]
     }
 }

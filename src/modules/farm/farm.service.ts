@@ -5,6 +5,7 @@ import { PlantModelArgs } from '../plant/plant.model.js'
 import { PlantService } from '../plant/plant.service.js'
 import { ProcessController } from '../process/process.controller.js'
 import { Process } from '../process/process.model.js'
+import { ProcessService } from '../process/process.service.js'
 import { FarmController } from './farm.controller.js'
 import { EnumProcess, ProcessInstance } from './process/index.js'
 
@@ -15,7 +16,7 @@ export class FarmService {
     private readonly plantController: PlantController
     private readonly processController: ProcessController
     private readonly plantsService: PlantService[]
-    private readonly processService: Process[]
+    private readonly processService: ProcessService[]
 
     constructor(farmId: number) {
         this.farmId = farmId
@@ -56,13 +57,7 @@ export class FarmService {
         this.processService.splice(0, this.processService.length)
 
         this.getProcess().map(process => {
-            const processInstance = ProcessInstance[EnumProcess[process.type]]
-
-            if (!processInstance) {
-                return
-            }
-
-            const processService = new processInstance(process)
+            const processService = new ProcessService({ processId: process.id })
 
             this.processService.push(processService)
         })

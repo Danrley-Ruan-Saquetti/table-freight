@@ -15,7 +15,6 @@ export type ProcessParams = {
 export class OrderTableProcess extends Process<PerformResult> {
     private readonly plantController: PlantController
     private readonly tableController: TableController
-    private readonly processController: ProcessController
     params: ProcessParams[]
 
     constructor(args: ProcessChildrenCreate) {
@@ -25,7 +24,6 @@ export class OrderTableProcess extends Process<PerformResult> {
 
         this.plantController = new PlantController()
         this.tableController = new TableController()
-        this.processController = new ProcessController()
     }
 
     // # Use Case
@@ -43,11 +41,6 @@ export class OrderTableProcess extends Process<PerformResult> {
             }
 
             this.result = Result.failure({ title: 'Process: Order Tables', message: 'Cannot order tables' })
-        } finally {
-            this.processController.update({
-                where: { id: { equals: this.id } },
-                data: { result: this.result },
-            })
         }
     }
 

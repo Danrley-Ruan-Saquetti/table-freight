@@ -1,3 +1,5 @@
+import { Document } from '../../lib/repository-memory/index.js'
+import { HeaderModel, HeaderType } from './header.model.js'
 import {
     HeaderRepository,
     HeaderCreateArgs,
@@ -17,6 +19,18 @@ export class HeaderController {
 
     constructor() {
         this.repository = new HeaderRepository()
+    }
+
+    filterHeadersByType(headers: HeaderModel[], type: HeaderType) {
+        return headers.filter(header => header.type == type)
+    }
+
+    filterHeaderByColumn(headers: HeaderModel[], column: number) {
+        return headers.find(header => header.column == column) || null
+    }
+
+    filterHeaderByName(headers: HeaderModel[], name: string) {
+        return headers.filter(header => header.name == name)
     }
 
     // Repository

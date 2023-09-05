@@ -23,43 +23,43 @@ export class ProcessController {
     createProcess() {}
 
     // Repository
-    create(args: ProcessCreateArgs) {
+    create<T = any, P = any>(args: ProcessCreateArgs<T, P>) {
         return this.repository.create(args)
     }
 
-    createMany(args: ProcessCreateManyArgs) {
+    createMany<T = any, P = any>(args: ProcessCreateManyArgs<T, P>) {
         return this.repository.createMany(args)
     }
 
-    update(args: ProcessUpdateArgs) {
+    update<T = any, P = any>(args: ProcessUpdateArgs<T, P>) {
         this.repository.update(args)
     }
 
-    updateMany(args: ProcessUpdateManyArgs) {
+    updateMany<T = any, P = any>(args: ProcessUpdateManyArgs<T, P>) {
         this.repository.updateMany(args)
     }
 
-    delete(args: ProcessDeleteArgs) {
+    delete<T = any, P = any>(args: ProcessDeleteArgs<T, P>) {
         this.repository.delete(args)
     }
 
-    deleteMany(args: ProcessDeleteManyArgs) {
+    deleteMany<T = any, P = any>(args: ProcessDeleteManyArgs<T, P>) {
         this.repository.deleteMany(args)
     }
 
-    findMany(args?: ProcessFindManyArgs) {
+    findMany<T = any, P = any>(args?: ProcessFindManyArgs<T, P>) {
         return this.repository.findMany({ orderBy: { order: 'ASC' }, ...args }).map(process => new Process(process))
     }
 
-    findFirst(args: ProcessFindFirstArgs) {
+    findFirst<T = any, P = any>(args: ProcessFindFirstArgs<T, P>) {
         return this.repository.findFirst(args)
     }
 
-    findIndex(args: ProcessFindIndexArgs) {
+    findIndex<T = any, P = any>(args: ProcessFindIndexArgs<T, P>) {
         return this.repository.findIndex(args)
     }
 
-    findManyIndex(args: ProcessFindManyIndexArgs) {
+    findManyIndex<T = any, P = any>(args: ProcessFindManyIndexArgs<T, P>) {
         return this.repository.findManyIndex(args)
     }
 }

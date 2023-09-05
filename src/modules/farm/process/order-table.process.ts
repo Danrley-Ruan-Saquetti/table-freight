@@ -1,7 +1,6 @@
 import { Result } from '../../../lib/result/index.js'
 import { PlantController } from '../../plant/plant.controller.js'
 import { Plant, PlantType } from '../../plant/plant.model.js'
-import { ProcessController } from '../../process/process.controller.js'
 import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
 import { TableController } from '../../table/table.controller.js'
 

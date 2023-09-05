@@ -4,9 +4,7 @@ import { HeaderController } from '../../header/header.controller.js'
 import { HeaderModel, HeaderModelArgs, HeaderType } from '../../header/header.model.js'
 import { PlantController } from '../../plant/plant.controller.js'
 import { Plant, PlantType } from '../../plant/plant.model.js'
-import { ProcessController } from '../../process/process.controller.js'
 import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
-import { TableController } from '../../table/table.controller.js'
 
 export type PerformResult = { message: string; details: { message: string; plant: string }[] }
 
@@ -19,7 +17,6 @@ export type PlantWhithHeaders = Plant & {
 
 export class ValidZipCodeContainedProcess extends Process<PerformResult> {
     private readonly plantController: PlantController
-    private readonly tableController: TableController
     private readonly headerController: HeaderController
     params: ProcessParams[]
 
@@ -29,7 +26,6 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
         this.params = args.params || []
 
         this.plantController = new PlantController()
-        this.tableController = new TableController()
         this.headerController = new HeaderController()
     }
 
@@ -67,10 +63,10 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
                 return this.validZipCodeContained(plant)
             } catch (err) {
                 if (err instanceof Result) {
-                    this.result = err as Result<PerformResult>
+                    return err as Result<{ message: string; plant: string }>
                 }
 
-                this.result = Result.failure({
+                return Result.failure<{ message: string; plant: string }>({
                     title: 'Process: Valid Zip Code Contained',
                     message: `Cannot validate zip code contained in plant "${plant.name}"`,
                 })

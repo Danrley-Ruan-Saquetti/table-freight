@@ -57,6 +57,7 @@ window.onload = () => {
     document.querySelector('button[data-button="get-data"]')?.addEventListener('click', getDataRepository)
 
     function getDataRepository() {
+        // @ts-expect-error
         console.log(Object.keys(ModelSchema.repository.models).map(key => ({ model: key, documents: ModelSchema.repository.models[key].documents })))
     }
 

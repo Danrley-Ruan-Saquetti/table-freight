@@ -5,7 +5,7 @@ export interface ProcessServiceModel {
     processId: number
 }
 
-export class ProcessService<ResultType = any> {
+export class ProcessService<ResultType = any, ParamsType = any> {
     protected readonly processController: ProcessController
     protected readonly processId: number
 
@@ -35,6 +35,6 @@ export class ProcessService<ResultType = any> {
     }
 
     protected action(): Result<ResultType> {
-        throw new Error('Method not inmplemented')
+        throw new Error('Method not implemented')
     }
 }

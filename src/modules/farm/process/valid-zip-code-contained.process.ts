@@ -33,7 +33,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
             const results = this.privateValidZipCodeContained()
 
             this.result = Result.success<PerformResult>({
-                message: 'Valid zip code conteined successfully',
+                message: 'Valid zip code contained successfully',
                 details: results.map(result => result.getValue()),
             })
         } catch (err) {
@@ -41,7 +41,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
                 this.result = err as Result<PerformResult>
             }
 
-            this.result = Result.failure({ title: 'Process: Valid Zip Code Conteined', message: 'Cannot validate zip code contained' })
+            this.result = Result.failure({ title: 'Process: Valid Zip Code Contained', message: 'Cannot validate zip code contained' })
         } finally {
             this.processController.update({
                 where: { id: { equals: this.id } },

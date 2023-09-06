@@ -1,5 +1,6 @@
 import { Result } from '../../lib/result/index.js'
-import { EnumProcess, ProcessInstance } from '../farm/process/index.js'
+import { EnumProcess } from '../farm/process/constants.js'
+import { ProcessInstance } from '../farm/process/index.js'
 import { ProcessController } from './process.controller.js'
 import { ProcessModel } from './process.model.js'
 

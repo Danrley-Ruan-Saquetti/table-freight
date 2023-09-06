@@ -23,4 +23,6 @@ export class TableController {
             return -1
         })
     }
+
+    addColumnInTable(table: Table, ...columns: { value: string; column: number }[]) {}
 }

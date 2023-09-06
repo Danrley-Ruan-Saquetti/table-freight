@@ -27,7 +27,7 @@ export type ProcessFindManyIndexArgs<T = any, P = any> = FindManyIndexArgs<Docum
 export type ProcessUpdateArgs<T = any, P = any> = UpdateArgs<Document<ProcessModelArgs<T, P>>>
 export type ProcessUpdateManyArgs<T = any, P = any> = UpdateManyArgs<Document<ProcessModelArgs<T, P>>>
 
-export class ProcessRepository extends ModelSchema {
+export class ProcessRepository extends ModelSchema<ProcessModelArgs> {
     constructor() {
         super('Process')
     }

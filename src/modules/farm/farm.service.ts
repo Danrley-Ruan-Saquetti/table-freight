@@ -1,69 +1,52 @@
-import { HeaderController } from '../header/header.controller.js'
 import { HeaderModelArgs } from '../header/header.model.js'
 import { PlantController } from '../plant/plant.controller.js'
 import { PlantModelArgs } from '../plant/plant.model.js'
-import { PlantService } from '../plant/plant.service.js'
 import { ProcessController } from '../process/process.controller.js'
-import { Process } from '../process/process.model.js'
 import { ProcessService } from '../process/process.service.js'
 import { FarmController } from './farm.controller.js'
-import { EnumProcess, ProcessInstance } from './process/index.js'
+import { EnumProcess } from './process/constants.js'
+import { ProcessInstance } from './process/index.js'
+import { PreProcess } from './process/pre.process.js'
 
 export class FarmService {
     readonly farmId: number
     private readonly farmController: FarmController
-    private readonly headerController: HeaderController
     private readonly plantController: PlantController
     private readonly processController: ProcessController
-    private readonly plantsService: PlantService[]
-    private readonly processService: ProcessService[]
+    private readonly preProcess: PreProcess
 
     constructor(farmId: number) {
         this.farmId = farmId
-        this.plantsService = []
-        this.processService = []
+
         this.farmController = new FarmController()
-        this.headerController = new HeaderController()
         this.plantController = new PlantController()
         this.processController = new ProcessController()
+        this.preProcess = new PreProcess({ farmId: this.farmId })
     }
 
     // # Use Case
     perform() {
         this.initComponents()
 
-        this.processService.map(process => {
-            process.perform()
+        this.getProcess().map(process => {
+            const processService = this.getProcessService(process)
+
+            if (!processService) {
+                return
+            }
+
+            processService.perform()
         })
     }
 
     // ## Setup
     private initComponents() {
-        this.resetListPlantsService()
-        this.resetListProcessService()
+        this.setupProcessService()
     }
 
-    private resetListPlantsService() {
-        this.plantsService.splice(0, this.plantsService.length)
-
-        this.getPlants().map(plant => {
-            const plantService = new PlantService(plant.id)
-
-            this.plantsService.push(plantService)
-        })
+    private setupProcessService() {
+        this.preProcess.perform()
     }
-
-    private resetListProcessService() {
-        this.processService.splice(0, this.processService.length)
-
-        this.getProcess().map(process => {
-            const processService = new ProcessService({ processId: process.id })
-
-            this.processService.push(processService)
-        })
-    }
-
-    // # Logic
 
     // # Config
     insertPlant(...plants: (Omit<PlantModelArgs, 'farmId'> & { headers: Omit<HeaderModelArgs, 'tableId'>[] })[]) {
@@ -74,10 +57,14 @@ export class FarmService {
 
     insertProcess(...process: { type: EnumProcess; params?: any[] }[]) {
         process.map(pro => {
-            const ProcessValue = ProcessInstance[pro.type]
+            const ProcessServiceInstance = ProcessInstance[pro.type]
 
-            this.processController.create({ data: new ProcessValue({ ...pro, farmId: this.farmId }) })
+            this.processController.create({ data: new ProcessServiceInstance({ ...pro, farmId: this.farmId }) })
         })
+    }
+
+    private getProcessService({ id }: { id: number }) {
+        return new ProcessService({ processId: id })
     }
 
     // # Utils

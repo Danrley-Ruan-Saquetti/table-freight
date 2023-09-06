@@ -1,6 +1,6 @@
 import { Document } from '../../lib/repository-memory/index.js'
 import { Result } from '../../lib/result/index.js'
-import { EnumProcess } from '../farm/process/index.js'
+import { EnumProcess } from '../farm/process/constants.js'
 
 export type ProcessModelArgs<ResultType = any, ParamsType = any> = {
     farmId: number
@@ -18,8 +18,11 @@ export type ProcessCreate<ResultType = any, ParamsType = any> = Omit<ProcessMode
     updateAt?: Date
     result?: Result<ResultType>
 }
-export type ProcessChildrenCreate = Omit<ProcessModel, 'params' | 'result' | 'createAt' | 'id' | 'updateAt' | 'order'> & {
-    params?: any[]
+export type ProcessChildrenCreate<ResultType = any, ParamsType = any> = Omit<
+    ProcessModel<ResultType, ParamsType>,
+    'params' | 'result' | 'createAt' | 'id' | 'updateAt' | 'order' | 'type'
+> & {
+    params?: ParamsType[]
     createAt?: Date
     id?: number
     updateAt?: Date

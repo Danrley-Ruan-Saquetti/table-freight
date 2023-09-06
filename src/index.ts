@@ -1,6 +1,6 @@
 import { ModelSchema } from './common/repository.js'
 import { FarmController } from './modules/farm/farm.controller.js'
-import { EnumProcess } from './modules/farm/process/index.js'
+import { EnumProcess } from './modules/farm/process/constants.js'
 import { HeaderType } from './modules/header/header.model.js'
 import { PlantType } from './modules/plant/plant.model.js'
 import { TableController } from './modules/table/table.controller.js'
@@ -23,8 +23,8 @@ window.onload = () => {
         }
 
         farmService.insertProcess(
-            { type: EnumProcess.OrderTable, params: [{ plantType: PlantType.Deadline, column: 0 }] },
-            { type: EnumProcess.ValidZipCodeContained, params: [{ plantType: PlantType.Deadline }] }
+            { type: EnumProcess.ValidZipCodeContained, params: [{ plantType: PlantType.Deadline }] },
+            { type: EnumProcess.IncrementDeadline, params: [{ plantType: PlantType.Total }] }
         )
         farmService.insertPlant(
             {
@@ -36,6 +36,7 @@ window.onload = () => {
                     { name: 'CEP FINAL', column: 1, type: HeaderType.ZipCodeFinal },
                     { name: 'PRAZO', column: 2, type: HeaderType.Deadline },
                     { name: 'CS', column: 3, type: HeaderType.CriteriaSelection },
+                    { name: 'REGIAO', column: 4, type: HeaderType.CriteriaSelection },
                 ],
             },
             {
@@ -44,7 +45,8 @@ window.onload = () => {
                 type: PlantType.Price,
                 headers: [
                     { name: 'CS', column: 0, type: HeaderType.CriteriaSelection },
-                    { name: 'EXCESS', column: 1, type: HeaderType.Excess },
+                    { name: 'REGIAO', column: 1, type: HeaderType.CriteriaSelection },
+                    { name: 'EXCESS', column: 2, type: HeaderType.Excess },
                 ],
             }
         )

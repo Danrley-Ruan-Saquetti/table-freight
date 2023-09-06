@@ -55,7 +55,7 @@ export class FarmController {
         const farm = this.findFirst({ where: { id: { equals: farmId } } })
 
         if (!farm) {
-            return null
+            throw new Error('Farm not found')
         }
 
         return new FarmService(farm.id)

@@ -3,6 +3,7 @@ import { PlantController } from '../../plant/plant.controller.js'
 import { Plant, PlantType } from '../../plant/plant.model.js'
 import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
 import { TableController } from '../../table/table.controller.js'
+import { EnumProcess } from './constants.js'
 
 export type PerformResult = { message: string; details: { message: string; plant: string }[] }
 
@@ -16,8 +17,8 @@ export class OrderTableProcess extends Process<PerformResult> {
     private readonly tableController: TableController
     params: ProcessParams[]
 
-    constructor(args: ProcessChildrenCreate) {
-        super({ ...args, order: 1 })
+    constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
+        super({ ...args, type: EnumProcess.OrderTable, order: 2 })
 
         this.params = args.params || []
 

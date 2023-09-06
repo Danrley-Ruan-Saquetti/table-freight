@@ -5,6 +5,7 @@ import { HeaderModel, HeaderModelArgs, HeaderType } from '../../header/header.mo
 import { PlantController } from '../../plant/plant.controller.js'
 import { Plant, PlantType } from '../../plant/plant.model.js'
 import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
+import { EnumProcess } from './constants.js'
 
 export type PerformResult = { message: string; details: { message: string; plant: string }[] }
 
@@ -20,8 +21,8 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
     private readonly headerController: HeaderController
     params: ProcessParams[]
 
-    constructor(args: ProcessChildrenCreate) {
-        super({ ...args, order: 2 })
+    constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
+        super({ ...args, type: EnumProcess.ValidZipCodeContained, order: 3 })
 
         this.params = args.params || []
 
@@ -130,7 +131,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
         const headerZipCodeFinal = this.headerController.filterHeadersByType(headers, HeaderType.ZipCodeFinal)[0]
 
         if (!headerZipCodeInitial || !headerZipCodeFinal) {
-            throw Result.failure({ title: 'Process: Valid Zip Code Contained', message: 'Header "Zip Code Initial/Final" not defined in plant ""' })
+            throw Result.failure({ title: 'Process: Valid Zip Code Contained', message: 'Header "Zip Code Initial/Final" not defined' })
         }
 
         return { headerZipCodeInitial, headerZipCodeFinal }

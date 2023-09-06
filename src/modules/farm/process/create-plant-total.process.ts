@@ -24,19 +24,11 @@ export class CreatePlantTotalProcess extends Process<PerformResult> {
 
     // # Use Case
     perform() {
-        try {
-            this.result = this.createPlantDeadline()
-        } catch (err) {
-            if (err instanceof Result) {
-                this.result = err as Result<PerformResult>
-            }
-
-            this.result = Result.failure({ title: `Process: ${this.name}`, message: `Cannot ${this.name}` })
-        }
+        this.result = this.createPlantTotal()
     }
 
     // # Logic
-    private createPlantDeadline() {
+    private createPlantTotal() {
         const farm = this.farmController.getFarm(this.farmId)
 
         farm.insertPlant({

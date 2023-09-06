@@ -21,9 +21,13 @@ export class ProcessService<ResultType = any, ParamsType = any> {
     perform() {
         let result: Result<ResultType>
 
-        try {
-            const process = this.getProcess()
+        const process = this.getProcess()
 
+        if (!process) {
+            return
+        }
+
+        try {
             const Instace = this.getProcessInstanceByType(process.type)
 
             const processInstance = new Instace(process)
@@ -35,7 +39,7 @@ export class ProcessService<ResultType = any, ParamsType = any> {
             if (err instanceof Result) {
                 result = err as Result<ResultType>
             } else {
-                result = Result.failure<ResultType>({ title: 'Process: Order Tables', message: 'Cannot order tables' })
+                result = Result.failure<ResultType>({ title: `Process: ${process.name}`, message: `Cannot realized process: ${process.name}` })
             }
         }
 

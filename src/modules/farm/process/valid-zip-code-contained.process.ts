@@ -33,20 +33,12 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
 
     // # Use Case
     perform() {
-        try {
-            const results = this.validZipCodeContainedInPlants()
+        const results = this.validZipCodeContainedInPlants()
 
-            this.result = Result.success<PerformResult>({
-                message: `${this.name} successfully`,
-                details: results.map(result => result.getValue()),
-            })
-        } catch (err) {
-            if (err instanceof Result) {
-                this.result = err as Result<PerformResult>
-            }
-
-            this.result = Result.failure({ title: `Process: ${this.name}`, message: 'Cannot validate zip code contained' })
-        }
+        this.result = Result.success<PerformResult>({
+            message: `${this.name} successfully`,
+            details: results.map(result => result.getValue()),
+        })
     }
 
     // # Logic

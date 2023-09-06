@@ -34,20 +34,12 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
 
     // # Use Case
     perform() {
-        try {
-            const results = this.incrementDeadlineInPlants()
+        const results = this.incrementDeadlineInPlants()
 
-            this.result = Result.success<PerformResult>({
-                message: `${this.name} successfully`,
-                details: results.map(result => result.getValue()),
-            })
-        } catch (err) {
-            if (err instanceof Result) {
-                this.result = err as Result<PerformResult>
-            }
-
-            this.result = Result.failure({ title: `Process: ${this.name}`, message: `Cannot ${this.name}` })
-        }
+        this.result = Result.success<PerformResult>({
+            message: `${this.name} successfully`,
+            details: results.map(result => result.getValue()),
+        })
     }
 
     // # Logic

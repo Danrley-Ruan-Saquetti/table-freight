@@ -18,12 +18,13 @@ export type PlantWhithHeaders = Plant & {
 }
 
 export class IncrementDeadlineProcess extends Process<PerformResult> {
+    static readonly ProcessName = 'Increment Deadline'
     private readonly plantController: PlantController
     private readonly headerController: HeaderController
     params: ProcessParams[]
 
     constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
-        super({ ...args, type: EnumProcess.IncrementDeadline, order: 4 })
+        super({ ...args, name: IncrementDeadlineProcess.ProcessName, type: EnumProcess.IncrementDeadline, order: 4 })
 
         this.params = args.params || []
 
@@ -37,7 +38,7 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
             const results = this.incrementDeadlineInPlants()
 
             this.result = Result.success<PerformResult>({
-                message: 'Increment Deadline successfully',
+                message: `${this.name} successfully`,
                 details: results.map(result => result.getValue()),
             })
         } catch (err) {
@@ -45,7 +46,7 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
                 this.result = err as Result<PerformResult>
             }
 
-            this.result = Result.failure({ title: 'Process: Increment Deadline', message: 'Cannot increment deadline' })
+            this.result = Result.failure({ title: `Process: ${this.name}`, message: `Cannot ${this.name}` })
         }
     }
 
@@ -56,7 +57,7 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
 
             if (!plant) {
                 return Result.failure<{ message: string; plant: string }>({
-                    title: `Increment Deadline "${plantType}"`,
+                    title: `${this.name} "${plantType}"`,
                     message: `Plant ${plantType} not defined`,
                 })
             }
@@ -69,8 +70,8 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
                 }
 
                 return Result.failure<{ message: string; plant: string }>({
-                    title: 'Process: Increment Deadline',
-                    message: `Cannot increment deadline in plant "${plant.name}"`,
+                    title: `Process: ${this.name}`,
+                    message: `Cannot ${this.name} in plant "${plant.name}"`,
                 })
             }
         })
@@ -94,7 +95,7 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
         const headerDeadline = this.headerController.filterHeadersByType(headers, HeaderType.Deadline)[0]
 
         if (!headerDeadline) {
-            throw Result.failure({ title: 'Process: Increment Deadline', message: 'Header "Deadline" not defined' })
+            throw Result.failure({ title: `Process: ${this.name}`, message: 'Header "Deadline" not defined' })
         }
 
         return { headerDeadline }

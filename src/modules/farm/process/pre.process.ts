@@ -61,6 +61,14 @@ export class PreProcess implements PreProcessModel {
         if (this.verifyIfAlreadyExistsProcess(EnumProcess.CreatePlantTotal)) {
             return
         }
+
+        const plant = this.plantController.findFirst({ where: { farmId: { equals: this.farmId }, type: { equals: PlantType.Deadline } } })
+
+        if (!plant) {
+            return
+        }
+
+        this.getFarmService().insertProcess({ type: EnumProcess.CreatePlantTotal })
     }
 
     private OrderTable(parentType: EnumProcess) {

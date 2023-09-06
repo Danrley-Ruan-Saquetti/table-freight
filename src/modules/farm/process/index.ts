@@ -15,8 +15,8 @@ export const ProcessInstance: { [x in keyof typeof EnumProcess]: new (args: Proc
 export type ProcessRelation = { name: string; active?: boolean; hidden?: boolean; preProcess?: EnumProcess[] }
 
 export const ProcessRelations: { [x in keyof typeof EnumProcess]: ProcessRelation } = {
-    CreatePlantTotal: { name: 'Create Plant Total' },
-    OrderTable: { name: 'Order Plant', hidden: true, preProcess: [EnumProcess.CreatePlantTotal] },
-    ValidZipCodeContained: { name: 'Valid Zip Code Contained in Plant', preProcess: [EnumProcess.OrderTable] },
-    IncrementDeadline: { name: 'Increment Deadline', preProcess: [EnumProcess.CreatePlantTotal] },
+    CreatePlantTotal: { name: CreatePlantTotalProcess.ProcessName },
+    OrderTable: { name: OrderTableProcess.ProcessName, hidden: true, preProcess: [EnumProcess.CreatePlantTotal] },
+    ValidZipCodeContained: { name: ValidZipCodeContainedProcess.ProcessName, preProcess: [EnumProcess.OrderTable] },
+    IncrementDeadline: { name: IncrementDeadlineProcess.ProcessName, preProcess: [EnumProcess.CreatePlantTotal] },
 }

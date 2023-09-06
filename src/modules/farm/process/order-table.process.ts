@@ -13,12 +13,13 @@ export type ProcessParams = {
 }
 
 export class OrderTableProcess extends Process<PerformResult> {
+    static readonly ProcessName = 'Order Table'
     private readonly plantController: PlantController
     private readonly tableController: TableController
     params: ProcessParams[]
 
     constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
-        super({ ...args, type: EnumProcess.OrderTable, order: 2 })
+        super({ ...args, name: OrderTableProcess.ProcessName, type: EnumProcess.OrderTable, order: 2 })
 
         this.params = args.params || []
 
@@ -40,7 +41,7 @@ export class OrderTableProcess extends Process<PerformResult> {
                 this.result = err as Result<PerformResult>
             }
 
-            this.result = Result.failure({ title: 'Process: Order Tables', message: 'Cannot order tables' })
+            this.result = Result.failure({ title: `Process: ${this.name}`, message: `Cannot ${this.name}` })
         }
     }
 
@@ -50,12 +51,12 @@ export class OrderTableProcess extends Process<PerformResult> {
             const plant = this.getPlantByType(plantType)
 
             if (!plant) {
-                return Result.failure<{ message: string; plant: string }>({ title: `Order table "${plantType}"`, message: `Plant ${plantType} not defined` })
+                return Result.failure<{ message: string; plant: string }>({ title: `${this.name} "${plantType}"`, message: `Plant ${plantType} not defined` })
             }
 
             if (!plant.table[0][column]) {
                 return Result.failure<{ message: string; plant: string }>({
-                    title: `Order table "${plantType}"`,
+                    title: `${this.name} "${plantType}"`,
                     message: `Column not found in plant ${plantType}`,
                 })
             }

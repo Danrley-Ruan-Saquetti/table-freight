@@ -17,12 +17,13 @@ export type PlantWhithHeaders = Plant & {
 }
 
 export class ValidZipCodeContainedProcess extends Process<PerformResult> {
+    static readonly ProcessName = 'Valid Zip Code Contained'
     private readonly plantController: PlantController
     private readonly headerController: HeaderController
     params: ProcessParams[]
 
     constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
-        super({ ...args, type: EnumProcess.ValidZipCodeContained, order: 3 })
+        super({ ...args, name: ValidZipCodeContainedProcess.ProcessName, type: EnumProcess.ValidZipCodeContained, order: 3 })
 
         this.params = args.params || []
 
@@ -36,7 +37,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
             const results = this.validZipCodeContainedInPlants()
 
             this.result = Result.success<PerformResult>({
-                message: 'Valid zip code contained successfully',
+                message: `${this.name} successfully`,
                 details: results.map(result => result.getValue()),
             })
         } catch (err) {
@@ -44,7 +45,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
                 this.result = err as Result<PerformResult>
             }
 
-            this.result = Result.failure({ title: 'Process: Valid Zip Code Contained', message: 'Cannot validate zip code contained' })
+            this.result = Result.failure({ title: `Process: ${this.name}`, message: 'Cannot validate zip code contained' })
         }
     }
 
@@ -55,7 +56,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
 
             if (!plant) {
                 return Result.failure<{ message: string; plant: string }>({
-                    title: `Valid Zip Code Contained "${plantType}"`,
+                    title: `${this.name} "${plantType}"`,
                     message: `Plant ${plantType} not defined`,
                 })
             }
@@ -68,7 +69,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
                 }
 
                 return Result.failure<{ message: string; plant: string }>({
-                    title: 'Process: Valid Zip Code Contained',
+                    title: `Process: ${this.name}`,
                     message: `Cannot validate zip code contained in plant "${plant.name}"`,
                 })
             }
@@ -97,7 +98,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
             if (valueZipCodeFinal - valueZipCodeInitial < 0) {
                 results.push(
                     Result.failure({
-                        title: `Process: Valid Zip Code Contained in Plant "${plant.name}"`,
+                        title: `Process: ${this.name} in Plant "${plant.name}"`,
                         message: `Zip code final ${valueZipCodeInitial} is less than zip code initial ${valueZipCodeInitial}`,
                     })
                 )
@@ -112,7 +113,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
             if (valueZipCodeInitial - lastValueZipCodeFinal <= 0) {
                 results.push(
                     Result.failure({
-                        title: `Process: Valid Zip Code Contained in Plant "${plant.name}"`,
+                        title: `Process: ${this.name} in Plant "${plant.name}"`,
                         message: `Zip code initial ${valueZipCodeInitial} is cointained in rate zip code ${lastValueZipCodeInitial} - ${lastValueZipCodeFinal}`,
                     })
                 )
@@ -131,7 +132,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
         const headerZipCodeFinal = this.headerController.filterHeadersByType(headers, HeaderType.ZipCodeFinal)[0]
 
         if (!headerZipCodeInitial || !headerZipCodeFinal) {
-            throw Result.failure({ title: 'Process: Valid Zip Code Contained', message: 'Header "Zip Code Initial/Final" not defined' })
+            throw Result.failure({ title: `Process: ${this.name}`, message: 'Header "Zip Code Initial/Final" not defined' })
         }
 
         return { headerZipCodeInitial, headerZipCodeFinal }

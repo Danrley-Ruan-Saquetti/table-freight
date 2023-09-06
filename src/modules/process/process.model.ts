@@ -8,6 +8,7 @@ export type ProcessModelArgs<ResultType = any, ParamsType = any> = {
     order: number
     params: ParamsType[]
     result: Result<ResultType>
+    name: string
 }
 
 export type ProcessModel<ResultType = any, ParamsType = any> = Document<ProcessModelArgs<ResultType, ParamsType>>
@@ -20,7 +21,7 @@ export type ProcessCreate<ResultType = any, ParamsType = any> = Omit<ProcessMode
 }
 export type ProcessChildrenCreate<ResultType = any, ParamsType = any> = Omit<
     ProcessModel<ResultType, ParamsType>,
-    'params' | 'result' | 'createAt' | 'id' | 'updateAt' | 'order' | 'type'
+    'params' | 'result' | 'createAt' | 'id' | 'updateAt' | 'order' | 'type' | 'name'
 > & {
     params?: ParamsType[]
     createAt?: Date
@@ -30,6 +31,7 @@ export type ProcessChildrenCreate<ResultType = any, ParamsType = any> = Omit<
 
 export class Process<ResultType = any, ParamsType = any> implements ProcessModel<ResultType, ParamsType> {
     farmId: number
+    name: string
     type: EnumProcess
     order: number
     params: ParamsType[]
@@ -38,12 +40,13 @@ export class Process<ResultType = any, ParamsType = any> implements ProcessModel
     id: number
     updateAt: Date
 
-    constructor({ farmId, type, order, params = [], createAt, id, updateAt, result }: ProcessCreate<ResultType>) {
+    constructor({ farmId, type, order, params = [], createAt, id, updateAt, result, name }: ProcessCreate<ResultType>) {
         this.farmId = farmId
         this.type = type
         this.order = order
         this.params = params
-        this.result = result || Result.failure({ title: 'Result Process', message: 'Process not finalized' })
+        this.name = name
+        this.result = result || Result.failure({ title: `Process: ${this.name}`, message: 'Process not realized' })
         // @ts-expect-error
         this.id = id
         // @ts-expect-error

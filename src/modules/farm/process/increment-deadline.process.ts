@@ -83,6 +83,34 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
 
         const { headerDeadline } = this.getHeaderDeadline(headers)
 
+        const headerDeadlineMoreValueDeadline: HeaderModelArgs = {
+            name: table[0][headerDeadline.column] + ' + ' + valueDeadline,
+            column: table[0].length,
+            tableId: plant.id,
+            type: HeaderType.Deadline,
+        }
+
+        table[0][headerDeadlineMoreValueDeadline.column] = headerDeadlineMoreValueDeadline.name
+
+        for (let i = 1; i < table.length; i++) {
+            const deadline = Number(table[i][headerDeadline.column])
+
+            if (isNaN(deadline)) {
+                continue
+            }
+
+            table[i][headerDeadlineMoreValueDeadline.column] = `${deadline + valueDeadline}`
+        }
+
+        this.plantController.update({
+            where: { id: { equals: plant.id } },
+            data: { table },
+        })
+
+        this.headerController.create({
+            data: headerDeadlineMoreValueDeadline,
+        })
+
         return Result.success<{ message: string; plant: string; warnings: Result[] }>({
             message: `Incremented deadline in Table ${plant.name} successfully`,
             plant: plant.name,

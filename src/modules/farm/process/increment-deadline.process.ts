@@ -7,7 +7,7 @@ import { Plant, PlantType } from '../../plant/plant.model.js'
 import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
 import { EnumProcess } from './constants.js'
 
-export type PerformResult = { message: string; details: { message: string; plant: string }[] }
+export type PerformResult = { message: string; details: Result<{ message: string; plant: string }>[] }
 
 export type ProcessParams = {
     plantType: PlantType
@@ -38,13 +38,20 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
 
         this.result = Result.success<PerformResult>({
             message: `${this.name} successfully`,
-            details: results.map(result => result.getValue()),
+            details: results,
         })
     }
 
     // # Logic
     private incrementDeadlineInPlants() {
         const results = this.params.map(({ plantType, valueIncrement }) => {
+            if (!valueIncrement) {
+                return Result.failure<{ message: string; plant: string }>({
+                    title: `${this.name} "${plantType}"`,
+                    message: 'Value increment not define',
+                })
+            }
+
             const plant = this.getPlantByType(plantType)
 
             if (!plant) {

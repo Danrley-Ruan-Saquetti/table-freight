@@ -35,11 +35,15 @@ export class ProcessService<ResultType = any, ParamsType = any> {
             processInstance.perform()
 
             result = processInstance.result
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof Result) {
                 result = err as Result<ResultType>
             } else {
-                result = Result.failure<ResultType>({ title: `Process: ${process.name}`, message: `Cannot realized process: ${process.name}` })
+                result = Result.failure<ResultType>({
+                    title: `Process: ${process.name}`,
+                    message: `Cannot realized process: ${process.name}`,
+                    description: err.message,
+                })
             }
         }
 

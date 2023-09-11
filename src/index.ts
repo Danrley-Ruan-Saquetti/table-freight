@@ -23,7 +23,7 @@ window.onload = () => {
         }
 
         farmService.insertProcess(
-            { type: EnumProcess.ValidZipCodeContained, params: [{ plantType: PlantType.Deadline }] },
+            { type: EnumProcess.ValidZipCodeContained, params: [{ plantType: PlantType.Total }] },
             { type: EnumProcess.IncrementDeadline, params: [{ plantType: PlantType.Total }] }
         )
         farmService.insertPlant(

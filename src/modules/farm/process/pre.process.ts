@@ -1,5 +1,4 @@
 import { HeaderController } from '../../header/header.controller.js'
-import { HeaderType } from '../../header/header.model.js'
 import { PlantController } from '../../plant/plant.controller.js'
 import { PlantType } from '../../plant/plant.model.js'
 import { ProcessController } from '../../process/process.controller.js'
@@ -29,17 +28,6 @@ export class PreProcess implements PreProcessModel {
 
     // # Use Case
     perform() {
-        const getPerformPreProcess = (type: EnumProcess) => {
-            switch (type) {
-                case EnumProcess.OrderTable:
-                    return this.OrderTable
-                case EnumProcess.CreatePlantTotal:
-                    return this.CreatePlantTotal
-            }
-
-            return () => {}
-        }
-
         this.getProcess().map(process => {
             const preProcess = this.getPreProcess(process.type)
 
@@ -51,8 +39,6 @@ export class PreProcess implements PreProcessModel {
         switch (type) {
             case EnumProcess.CreatePlantTotal:
                 return this.CreatePlantTotal(parent)
-            case EnumProcess.OrderTable:
-                return this.OrderTable(parent)
         }
     }
 
@@ -69,28 +55,6 @@ export class PreProcess implements PreProcessModel {
         }
 
         this.getFarmService().insertProcess({ type: EnumProcess.CreatePlantTotal })
-    }
-
-    private OrderTable(parentType: EnumProcess) {
-        if (this.verifyIfAlreadyExistsProcess(EnumProcess.OrderTable)) {
-            return
-        }
-
-        const plant = this.plantController.findFirst({ where: { farmId: { equals: this.farmId }, type: { equals: PlantType.Deadline } } })
-
-        if (!plant) {
-            return
-        }
-
-        const headers = this.headerController.findMany({ where: { tableId: { equals: plant.id } } })
-
-        const header = this.headerController.filterHeadersByType(headers, HeaderType.ZipCodeInitial)[0]
-
-        if (!header) {
-            return
-        }
-
-        this.getFarmService().insertProcess({ type: EnumProcess.OrderTable, params: [{ plantType: PlantType.Deadline, column: header.column }] })
     }
 
     // # Utils

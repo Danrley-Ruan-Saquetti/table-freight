@@ -5,6 +5,7 @@ import { HeaderModel, HeaderModelArgs, HeaderType } from '../../header/header.mo
 import { PlantController } from '../../plant/plant.controller.js'
 import { Plant, PlantType } from '../../plant/plant.model.js'
 import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
+import { OrderTableUtil } from '../util/order-table.js'
 import { EnumProcess } from './constants.js'
 
 export type PerformResult = { message: string; details: { message: string; plant: string }[] }
@@ -20,6 +21,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
     static readonly ProcessName = 'Valid Zip Code Contained'
     private readonly plantController: PlantController
     private readonly headerController: HeaderController
+    private readonly orderTableUtil: OrderTableUtil
     params: ProcessParams[]
 
     constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
@@ -29,6 +31,7 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
 
         this.plantController = new PlantController()
         this.headerController = new HeaderController()
+        this.orderTableUtil = new OrderTableUtil(this.farmId)
     }
 
     // # Use Case
@@ -54,7 +57,10 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
             }
 
             try {
-                return this.validZipCodeContained(plant)
+                this.orderPlant(plantType)
+                const resultValid = this.validZipCodeContained(plant)
+
+                return Result.inherit<{ message: string; plant: string }>(resultValid.getResponse())
             } catch (err) {
                 if (err instanceof Result) {
                     return err as Result<{ message: string; plant: string }>
@@ -68,6 +74,18 @@ export class ValidZipCodeContainedProcess extends Process<PerformResult> {
         })
 
         return results
+    }
+
+    private orderPlant(plantType: PlantType) {
+        const plant = this.getPlantByType(plantType)
+
+        const headerZipCodeInitial = this.headerController.filterHeadersByType(plant.headers, HeaderType.ZipCodeInitial)[0]
+
+        if (!headerZipCodeInitial) {
+            return Result.failure<{ message: string; plant: string }>({ title: `Order Table ${plantType}`, message: `Cannot order plant ${plantType}` })
+        }
+
+        return this.orderTableUtil.perform(headerZipCodeInitial.column, plantType)
     }
 
     private validZipCodeContained(plant: PlantWhithHeaders) {

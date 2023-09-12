@@ -44,7 +44,10 @@ export class PreProcess implements PreProcessModel {
 
     // # Logic
     private CreatePlantTotal(parentType: EnumProcess) {
-        if (this.verifyIfAlreadyExistsProcess(EnumProcess.CreatePlantTotal)) {
+        if (
+            this.verifyIfAlreadyExistsProcess(EnumProcess.CreatePlantTotal) ||
+            !!this.plantController.findFirst({ where: { farmId: { equals: this.farmId }, type: { equals: PlantType.Total } } })
+        ) {
             return
         }
 

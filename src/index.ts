@@ -24,7 +24,8 @@ window.onload = () => {
 
         farmService.insertProcess(
             { type: EnumProcess.ValidZipCodeContained, params: [{ plantType: PlantType.Total }] },
-            { type: EnumProcess.IncrementDeadline, params: [{ plantType: PlantType.Total, valueIncrement: 1 }] }
+            { type: EnumProcess.IncrementDeadline, params: [{ plantType: PlantType.Total, valueIncrement: 1 }] },
+            { type: EnumProcess.ProcvFreightToTotal, params: [{joinSelectionCriteria: ' '}] }
         )
         farmService.insertPlant(
             {
@@ -42,11 +43,16 @@ window.onload = () => {
             {
                 table: tableFreight,
                 name: 'Plant Freight',
-                type: PlantType.Price,
+                type: PlantType.Freight,
                 headers: [
                     { name: 'CS', column: 0, type: HeaderType.CriteriaSelection },
                     { name: 'REGIAO', column: 1, type: HeaderType.CriteriaSelection },
                     { name: 'EXCESS', column: 2, type: HeaderType.Excess },
+                    { name: '10', column: 3, type: HeaderType.Freight },
+                    { name: '20', column: 4, type: HeaderType.Freight },
+                    { name: '30', column: 5, type: HeaderType.Freight },
+                    { name: '40', column: 6, type: HeaderType.Freight },
+                    { name: '50', column: 7, type: HeaderType.Freight },
                 ],
             }
         )

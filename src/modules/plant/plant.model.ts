@@ -3,10 +3,10 @@ import { Document } from '../../lib/repository-memory'
 
 export enum PlantType {
     'Deadline' = 'Deadline',
-    'Price' = 'Price',
+    'Freight' = 'Freight',
     'Total' = 'Total',
     'TemplateDeadline' = 'TemplateDeadline',
-    'TemplatePrice' = 'TemplatePrice',
+    'TemplateFreight' = 'TemplateFreight',
     'TemplateRate' = 'TemplateRate',
 }
 

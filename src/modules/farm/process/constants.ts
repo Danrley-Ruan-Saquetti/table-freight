@@ -3,4 +3,5 @@ export enum EnumProcess {
     IncrementDeadline = 'IncrementDeadline',
     CreatePlantTotal = 'CreatePlantTotal',
     ProcvFreightToTotal = 'ProcvFreightToTotal',
+    GenerateTemplateTable = 'GenerateTemplateTable'
 }

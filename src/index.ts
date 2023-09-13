@@ -25,7 +25,8 @@ window.onload = () => {
         farmService.insertProcess(
             { type: EnumProcess.ValidZipCodeContained, params: [{ plantType: PlantType.Total }] },
             { type: EnumProcess.IncrementDeadline, params: [{ plantType: PlantType.Total, valueIncrement: 1 }] },
-            { type: EnumProcess.ProcvFreightToTotal, params: [{joinSelectionCriteria: ' '}] }
+            { type: EnumProcess.ProcvFreightToTotal, params: [{joinSelectionCriteria: ' '}] },
+            { type: EnumProcess.GenerateTemplateTable, params: [] }
         )
         farmService.insertPlant(
             {

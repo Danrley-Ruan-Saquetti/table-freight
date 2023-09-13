@@ -7,7 +7,7 @@ import { Plant, PlantType } from '../../plant/plant.model.js'
 import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
 import { EnumProcess } from './constants.js'
 
-export type PerformResult = { message: string; details: Result<{ message: string; plant: string }>[] }
+export type PerformResult = { message: string }
 
 export type ProcessParams = {
     joinSelectionCriteria: string
@@ -36,8 +36,7 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
         const results = this.performProcv()
 
         this.result = Result.success<PerformResult>({
-            message: `${this.name} successfully`,
-            details: [],
+            message: `${this.name} successfully`
         })
     }
 
@@ -85,8 +84,10 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
         })
 
         this.headerController.createMany({
-            data: headersFreightToTotal.map((header, j) => ({...header, tableId: plantTotal.id, column: headersFreightToTotal.length + j}))
+            data: headersFreightToTotal.map((header, j) => ({name: header.name,type: header.type, tableId: plantTotal.id, column: headersFreightToTotal.length + j}))
         })
+
+        console.log(this.plantController.findFirstIncludeHeaders({where: {id: {equals: plantTotal.id}}}))
     }
 
     private getHeaderByTypes(headers: HeaderModel[], ...types: HeaderType[]) {

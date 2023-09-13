@@ -55,6 +55,10 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
         const headerTotalCriteriaSelection = this.getHeaderByTypes(headersTotal, HeaderType.CriteriaSelection)
         const headerFreightCriteriaSelection = this.getHeaderByTypes(headersFreight, HeaderType.CriteriaSelection)
 
+        headersFreightToTotal.map((headerFreightToTotal, j) => {
+            plantTotal.table[0][plantTotal.table[0].length] = plantFreight.table[0][headerFreightToTotal.column]
+        })
+
         for(let i = 1; i < plantTotal.table.length; i++) {
             const selectionCriteriaTotal = headerTotalCriteriaSelection.map(header => plantTotal.table[i][header.column]).join(joinSelectionCriteria)
 
@@ -69,11 +73,20 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
             }
 
             headersFreightToTotal.map((headerFreightToTotal, j) => {
-                console.log(plantTotal.table[i][headerFreightToTotal.column])
+                plantTotal.table[i][plantTotal.table[i].length] = plantFreight.table[i][headerFreightToTotal.column]
             })
-
-            console.log([selectionCriteriaTotal], index, plantFreight.table[index])
         }
+
+        this.plantController.update({
+            where: {id: {equals: plantTotal.id}},
+            data: {
+                table: plantTotal.table
+            }
+        })
+
+        this.headerController.createMany({
+            data: headersFreightToTotal.map((header, j) => ({...header, tableId: plantTotal.id, column: headersFreightToTotal.length + j}))
+        })
     }
 
     private getHeaderByTypes(headers: HeaderModel[], ...types: HeaderType[]) {

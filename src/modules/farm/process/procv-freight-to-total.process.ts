@@ -25,7 +25,7 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
     constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
         super({ ...args, name: ProcvFreightToTotalProcess.ProcessName, type: EnumProcess.ProcvFreightToTotal, order: 5 })
 
-        this.params = [{joinSelectionCriteria: (args.params || [])[0]?.joinSelectionCriteria || ' '}]
+        this.params = [{ joinSelectionCriteria: (args.params || [])[0]?.joinSelectionCriteria || ' ' }]
 
         this.plantController = new PlantController()
         this.headerController = new HeaderController()
@@ -36,13 +36,13 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
         const results = this.performProcv()
 
         this.result = Result.success<PerformResult>({
-            message: `${this.name} successfully`
+            message: `${this.name} successfully`,
         })
     }
 
     // # Logic
     private performProcv() {
-        const {joinSelectionCriteria} = this.params[0]
+        const { joinSelectionCriteria } = this.params[0]
 
         const plantTotal = this.getPlantByType(PlantType.Total)
         const plantFreight = this.getPlantByType(PlantType.Freight)
@@ -58,7 +58,7 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
             plantTotal.table[0][plantTotal.table[0].length] = plantFreight.table[0][headerFreightToTotal.column]
         })
 
-        for(let i = 1; i < plantTotal.table.length; i++) {
+        for (let i = 1; i < plantTotal.table.length; i++) {
             const selectionCriteriaTotal = headerTotalCriteriaSelection.map(header => plantTotal.table[i][header.column]).join(joinSelectionCriteria)
 
             const index = plantFreight.table.findIndex(line => {
@@ -77,23 +77,28 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
         }
 
         this.plantController.update({
-            where: {id: {equals: plantTotal.id}},
+            where: { id: { equals: plantTotal.id } },
             data: {
-                table: plantTotal.table
-            }
+                table: plantTotal.table,
+            },
         })
 
         this.headerController.createMany({
-            data: headersFreightToTotal.map((header, j) => ({name: header.name,type: header.type, tableId: plantTotal.id, column: headersFreightToTotal.length + j}))
+            data: headersFreightToTotal.map((header, j) => ({
+                name: header.name,
+                type: header.type,
+                tableId: plantTotal.id,
+                column: headersFreightToTotal.length + j,
+            })),
         })
-
-        console.log(this.plantController.findFirstIncludeHeaders({where: {id: {equals: plantTotal.id}}}))
     }
 
     private getHeaderByTypes(headers: HeaderModel[], ...types: HeaderType[]) {
-        return types.map(type => this.headerController.filterHeadersByType(headers, type)).reduce(function (resultado, fila) {
-            return resultado.concat(fila)
-          }, [])
+        return types
+            .map(type => this.headerController.filterHeadersByType(headers, type))
+            .reduce(function (resultado, fila) {
+                return resultado.concat(fila)
+            }, [])
     }
 
     // # Utils

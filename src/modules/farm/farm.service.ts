@@ -1,3 +1,4 @@
+import { ModelSchema } from '../../common/repository.js'
 import { HeaderModelArgs } from '../header/header.model.js'
 import { PlantController } from '../plant/plant.controller.js'
 import { PlantModelArgs } from '../plant/plant.model.js'

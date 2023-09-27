@@ -87,7 +87,7 @@ export class IncrementDeadlineProcess extends Process<PerformResult> {
             name: table[0][headerDeadline.column] + ' + ' + valueDeadline,
             column: table[0].length,
             tableId: plant.id,
-            type: HeaderType.Deadline,
+            type: HeaderType.DeadlineMoreD,
         }
 
         table[0][headerDeadlineMoreValueDeadline.column] = headerDeadlineMoreValueDeadline.name

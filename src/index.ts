@@ -2,7 +2,7 @@ import { ModelSchema } from './common/repository.js'
 import { FarmController } from './modules/farm/farm.controller.js'
 import { EnumProcess } from './modules/farm/process/constants.js'
 import { HeaderType } from './modules/header/header.model.js'
-import { PlantType } from './modules/plant/plant.model.js'
+import { Plant, PlantType } from './modules/plant/plant.model.js'
 import { TableController } from './modules/table/table.controller.js'
 import { TABLE_CONTENT_DEADLINE, TABLE_CONTENT_FREIGHT } from './test/table.js'
 
@@ -25,8 +25,23 @@ window.onload = () => {
         farmService.insertProcess(
             { type: EnumProcess.ValidZipCodeContained, params: [{ plantType: PlantType.Total }] },
             { type: EnumProcess.IncrementDeadline, params: [{ plantType: PlantType.Total, valueIncrement: 1 }] },
-            { type: EnumProcess.ProcvFreightToTotal, params: [{joinSelectionCriteria: ' '}] },
-            { type: EnumProcess.GenerateTemplateTable, params: [] }
+            { type: EnumProcess.ProcvFreightToTotal, params: [{ joinSelectionCriteria: ' ' }] },
+            {
+                type: EnumProcess.GenerateTemplateTable,
+                params: [
+                    {
+                        zipCodeOriginInitialValue: '0',
+                        zipCodeOriginFinalValue: '0',
+                        zipCodeOriginInitial: 'CEP ORIGEM INICIAL',
+                        zipCodeOriginFinal: 'CEP ORIGEM FINAL',
+                        zipCodeInitial: 'CEP INICIAL',
+                        zipCodeFinal: 'CEP FINAL',
+                        deadline: 'PRAZO',
+                        excess: 'EXCEDENTE',
+                        generatePlants: [PlantType.TemplateDeadline, PlantType.TemplateFreight],
+                    },
+                ],
+            }
         )
         farmService.insertPlant(
             {

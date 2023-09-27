@@ -79,10 +79,10 @@ export class CreatePlantTotalProcess extends Process<PerformResult> {
             ...this.headerController.filterHeadersByType(plantDeadline.headers, HeaderType.CriteriaSelection),
         ]
 
-        const headerTotal: HeaderModel[] = []
+        const headersTotal: HeaderModel[] = []
 
         headersDeadelineInTotal.map((headerDeadline, i) => {
-            headerTotal.push({ ...headerDeadline, column: i })
+            headersTotal.push({ ...headerDeadline, column: i })
 
             for (let i = 0; i < plantDeadline.table.length; i++) {
                 if (typeof plantTotal.table[i] == 'undefined') {
@@ -94,7 +94,7 @@ export class CreatePlantTotalProcess extends Process<PerformResult> {
         })
 
         this.headerController.createMany({
-            data: headerTotal.map(header => ({
+            data: headersTotal.map(header => ({
                 ...header,
                 tableId: plantTotal.id,
             })),

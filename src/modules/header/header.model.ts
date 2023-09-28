@@ -10,6 +10,7 @@ export enum HeaderType {
     CriteriaSelection = 'CriteriaSelection',
     Excess = 'Excess',
     Freight = 'Freight',
+    Rate = 'Rate',
 }
 
 export interface HeaderModelArgs {

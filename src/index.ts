@@ -54,6 +54,7 @@ window.onload = () => {
                     { name: 'PRAZO', column: 2, type: HeaderType.Deadline },
                     { name: 'CS', column: 3, type: HeaderType.CriteriaSelection },
                     { name: 'REGIAO', column: 4, type: HeaderType.CriteriaSelection },
+                    { name: 'GRIS', column: 5, type: HeaderType.Rate },
                 ],
             },
             {
@@ -63,19 +64,18 @@ window.onload = () => {
                 headers: [
                     { name: 'CS', column: 0, type: HeaderType.CriteriaSelection },
                     { name: 'REGIAO', column: 1, type: HeaderType.CriteriaSelection },
-                    { name: 'EXCESS', column: 2, type: HeaderType.Excess },
-                    { name: '10', column: 3, type: HeaderType.Freight },
-                    { name: '20', column: 4, type: HeaderType.Freight },
-                    { name: '30', column: 5, type: HeaderType.Freight },
-                    { name: '40', column: 6, type: HeaderType.Freight },
-                    { name: '50', column: 7, type: HeaderType.Freight },
+                    { name: 'ADV', column: 2, type: HeaderType.Rate },
+                    { name: 'EXCESS', column: 3, type: HeaderType.Excess },
+                    { name: '10', column: 4, type: HeaderType.Freight },
+                    { name: '20', column: 5, type: HeaderType.Freight },
+                    { name: '30', column: 6, type: HeaderType.Freight },
+                    { name: '40', column: 7, type: HeaderType.Freight },
+                    { name: '50', column: 8, type: HeaderType.Freight },
                 ],
             }
         )
 
         farmService.perform()
-
-        console.log(farmService.getState())
     }
 
     document.querySelector('button[data-button="get-data"]')?.addEventListener('click', getDataRepository)

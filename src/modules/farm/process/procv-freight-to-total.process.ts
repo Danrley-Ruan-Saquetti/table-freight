@@ -47,15 +47,30 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
         const plantTotal = this.getPlantByType(PlantType.Total)
         const plantFreight = this.getPlantByType(PlantType.Freight)
 
-        const headersTotal = this.getHeaderByTypes(plantTotal.headers, HeaderType.CriteriaSelection)
-        const headersFreight = this.getHeaderByTypes(plantFreight.headers, HeaderType.CriteriaSelection, HeaderType.Excess, HeaderType.Freight)
-        const headersFreightToTotal = this.getHeaderByTypes(plantFreight.headers, HeaderType.Excess, HeaderType.Freight)
+        const headersTotal = this.getHeaderByTypes(
+            plantTotal.headers,
+            HeaderType.ZipCodeInitial,
+            HeaderType.ZipCodeFinal,
+            HeaderType.Deadline,
+            HeaderType.CriteriaSelection,
+            HeaderType.DeadlineMoreD,
+            HeaderType.Rate
+        )
+        const headersFreight = this.getHeaderByTypes(plantFreight.headers, HeaderType.Rate, HeaderType.CriteriaSelection, HeaderType.Excess, HeaderType.Freight)
+        const headersFreightToTotal: (HeaderModel & { columnOriginTotal?: number })[] = this.getHeaderByTypes(
+            plantFreight.headers,
+            HeaderType.Rate,
+            HeaderType.Excess,
+            HeaderType.Freight
+        )
 
         const headerTotalCriteriaSelection = this.getHeaderByTypes(headersTotal, HeaderType.CriteriaSelection)
         const headerFreightCriteriaSelection = this.getHeaderByTypes(headersFreight, HeaderType.CriteriaSelection)
 
         headersFreightToTotal.map((headerFreightToTotal, j) => {
-            plantTotal.table[0][plantTotal.table[0].length] = plantFreight.table[0][headerFreightToTotal.column]
+            plantTotal.table[0][plantTotal.table[0].length] = plantFreight.table[0][headerFreightToTotal.column] || ''
+            headerFreightToTotal.columnOriginTotal = headerFreightToTotal.column
+            headerFreightToTotal.column = j + headersTotal.length
         })
 
         for (let i = 1; i < plantTotal.table.length; i++) {
@@ -71,8 +86,9 @@ export class ProcvFreightToTotalProcess extends Process<PerformResult> {
                 continue
             }
 
-            headersFreightToTotal.map((headerFreightToTotal, j) => {
-                plantTotal.table[i][plantTotal.table[i].length] = plantFreight.table[i][headerFreightToTotal.column]
+            headersFreightToTotal.map(headerFreightToTotal => {
+                // @ts-expect-error
+                plantTotal.table[i][headerFreightToTotal.column] = plantFreight.table[index][headerFreightToTotal.columnOriginTotal] || ''
             })
         }
 

@@ -76,21 +76,24 @@ export class CreatePlantTotalProcess extends Process<PerformResult> {
             ...this.headerController.filterHeadersByType(plantDeadline.headers, HeaderType.ZipCodeInitial),
             ...this.headerController.filterHeadersByType(plantDeadline.headers, HeaderType.ZipCodeFinal),
             ...this.headerController.filterHeadersByType(plantDeadline.headers, HeaderType.Deadline),
+            ...this.headerController.filterHeadersByType(plantDeadline.headers, HeaderType.Rate),
             ...this.headerController.filterHeadersByType(plantDeadline.headers, HeaderType.CriteriaSelection),
         ]
 
         const headersTotal: HeaderModel[] = []
 
-        headersDeadelineInTotal.map((headerDeadline, i) => {
-            headersTotal.push({ ...headerDeadline, column: i })
-
+        let columnIndex = 0
+        headersDeadelineInTotal.map((headerDeadline, j) => {
             for (let i = 0; i < plantDeadline.table.length; i++) {
                 if (typeof plantTotal.table[i] == 'undefined') {
                     plantTotal.table.push([])
                 }
 
-                plantTotal.table[i][headerDeadline.column] = plantDeadline.table[i][headerDeadline.column]
+                plantTotal.table[i][columnIndex] = plantDeadline.table[i][headerDeadline.column]
             }
+
+            columnIndex++
+            headersTotal.push({ ...headerDeadline, column: j })
         })
 
         this.headerController.createMany({

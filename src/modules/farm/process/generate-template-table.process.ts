@@ -5,6 +5,7 @@ import { HeaderModel, HeaderModelArgs, HeaderType } from '../../header/header.mo
 import { PlantController } from '../../plant/plant.controller.js'
 import { Plant, PlantType } from '../../plant/plant.model.js'
 import { Process, ProcessChildrenCreate } from '../../process/process.model.js'
+import { TableController } from '../../table/table.controller.js'
 import { EnumProcess } from './constants.js'
 
 export type PerformResult = { message: string; details: { message: string; plant: string }[] }
@@ -28,6 +29,7 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
     static readonly ProcessName = 'Generate Template'
     private readonly plantController: PlantController
     private readonly headerController: HeaderController
+    private readonly tableController: TableController
     params: ProcessParams[]
 
     constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
@@ -37,6 +39,7 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
 
         this.plantController = new PlantController()
         this.headerController = new HeaderController()
+        this.tableController = new TableController()
     }
 
     // # Use Case
@@ -53,16 +56,16 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
     private performGenerateTemplateTable() {
         const plantTotal = this.getPlantByType(PlantType.Total)
 
-        const plantTemplateDeadline = this.generateTemplateDeadline(plantTotal)
-        const plantTemplateFreight = this.generateTemplateFreight(plantTotal)
-        // const templateRate = this.generateTemplateRate(plantTotal)
+        this.generateTemplateDeadline(plantTotal)
+        this.generateTemplateFreight(plantTotal)
+        this.generateTemplatesRate(plantTotal)
     }
 
     private generateTemplateDeadline(plantTotal: PlantWhithHeaders) {
         const plantTemplateDeadline = this.createBaseTemplate('Template Deadline', PlantType.TemplateDeadline)
 
         const headersPlantToTemplate = [
-            ...this.getHeaderByTypes(plantTotal.headers, HeaderType.ZipCodeInitial, HeaderType.ZipCodeFinal, HeaderType.DeadlineMoreD),
+            ...this.getHeadersByTypes(plantTotal.headers, HeaderType.ZipCodeInitial, HeaderType.ZipCodeFinal, HeaderType.DeadlineMoreD),
         ]
 
         const headersTemplate: (HeaderModel & { value?: string; columnOriginTotal?: number })[] = [
@@ -91,7 +94,7 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
         headersPlantToTemplate.map((headerDeadline, i) => {
             const header: HeaderModel & { columnOriginTotal?: number } = {
                 name: this.getNameHeaderByType(headerDeadline.type),
-                column: i + headersPlantToTemplate.length - 1,
+                column: i + 2,
                 type: headerDeadline.type,
                 tableId: headerDeadline.tableId,
                 id: headerDeadline.id,
@@ -102,8 +105,6 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
 
             headersTemplate.push(header)
         })
-
-        console.log(headersTemplate)
 
         this.generateTemplate(headersTemplate, plantTemplateDeadline, plantTotal)
     }
@@ -112,7 +113,7 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
         const plantTemplateFreight = this.createBaseTemplate('Template Freight', PlantType.TemplateFreight)
 
         const headersPlantToTemplate = [
-            ...this.getHeaderByTypes(plantTotal.headers, HeaderType.ZipCodeInitial, HeaderType.ZipCodeFinal, HeaderType.Excess, HeaderType.Freight),
+            ...this.getHeadersByTypes(plantTotal.headers, HeaderType.ZipCodeInitial, HeaderType.ZipCodeFinal, HeaderType.Excess, HeaderType.Freight),
         ]
 
         const headersTemplate: (HeaderModel & { value?: string; columnOriginTotal?: number })[] = [
@@ -130,7 +131,7 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
                 name: this.getNameHeaderByType(HeaderType.ZipCodeOriginFinal),
                 column: 1,
                 type: HeaderType.ZipCodeOriginFinal,
-                tableId: plantTemplateFreight.id,
+                tableId: plantTemplateFreight.id - 1,
                 createAt: plantTemplateFreight.createAt,
                 updateAt: plantTemplateFreight.updateAt,
                 id: 0,
@@ -140,8 +141,8 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
 
         headersPlantToTemplate.map((headerDeadline, i) => {
             const header: HeaderModel & { columnOriginTotal?: number } = {
-                name: this.getNameHeaderByType(headerDeadline.type),
-                column: i + headersPlantToTemplate.length - 1,
+                name: headerDeadline.type == HeaderType.Freight ? headerDeadline.name : this.getNameHeaderByType(headerDeadline.type),
+                column: i + 2,
                 type: headerDeadline.type,
                 tableId: headerDeadline.tableId,
                 id: headerDeadline.id,
@@ -153,34 +154,100 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
             headersTemplate.push(header)
         })
 
-        console.log(headersTemplate)
-
         this.generateTemplate(headersTemplate, plantTemplateFreight, plantTotal)
     }
 
-    private generateTemplateRate(plantTotal: PlantWhithHeaders) {
-        const plantTemplateRate = this.createBaseTemplate('Template Rate', PlantType.TemplateRate)
+    private generateTemplatesRate(plantTotal: PlantWhithHeaders) {
+        const headersRate = this.getHeadersByTypes(plantTotal.headers, HeaderType.Rate)
+
+        const valuesRate = headersRate.map(header => ({
+            name: header.name,
+            column: header.column,
+            values: this.tableController.getDistinctColumnValues(plantTotal.table, header.column, [0]),
+        }))
+
+        valuesRate
+            .filter(({ values }) => values)
+            .map(({ name, values, column }) => values.map(value => this.generateTemplateRate(plantTotal, name, value, column)))
     }
 
-    private generateTemplate(headersTemplate: (HeaderModel & { value?: string; columnOriginTotal?: number })[], plantTemplate: Plant, plantBase: Plant) {
+    private generateTemplateRate(plantTotal: PlantWhithHeaders, name: string, value: string, column: number) {
+        const plantTemplateRate = this.createBaseTemplate(`Template Rate - ${name}: ${value}`, PlantType.TemplateRate)
+
+        const headersPlantToTemplate = [...this.getHeadersByTypes(plantTotal.headers, HeaderType.ZipCodeInitial, HeaderType.ZipCodeFinal)]
+
+        const headersTemplate: (HeaderModel & { value?: string; columnOriginTotal?: number })[] = [
+            {
+                name: this.getNameHeaderByType(HeaderType.ZipCodeOriginInitial),
+                column: 0,
+                type: HeaderType.ZipCodeOriginInitial,
+                tableId: plantTemplateRate.id,
+                createAt: plantTemplateRate.createAt,
+                updateAt: plantTemplateRate.updateAt,
+                id: 0,
+                value: this.params[0].zipCodeOriginInitialValue,
+            },
+            {
+                name: this.getNameHeaderByType(HeaderType.ZipCodeOriginFinal),
+                column: 1,
+                type: HeaderType.ZipCodeOriginFinal,
+                tableId: plantTemplateRate.id - 1,
+                createAt: plantTemplateRate.createAt,
+                updateAt: plantTemplateRate.updateAt,
+                id: 0,
+                value: this.params[0].zipCodeOriginFinalValue,
+            },
+        ]
+
+        headersPlantToTemplate.map((headerDeadline, i) => {
+            const header: HeaderModel & { columnOriginTotal?: number } = {
+                name: this.getNameHeaderByType(headerDeadline.type),
+                column: i + 2,
+                type: headerDeadline.type,
+                tableId: headerDeadline.tableId,
+                id: headerDeadline.id,
+                createAt: headerDeadline.createAt,
+                updateAt: headerDeadline.updateAt,
+                columnOriginTotal: headerDeadline.column,
+            }
+
+            headersTemplate.push(header)
+        })
+
+        this.generateTemplate(headersTemplate, plantTemplateRate, plantTotal, { value, column })
+    }
+
+    private generateTemplate(
+        headersTemplate: (HeaderModel & { value?: string; columnOriginTotal?: number })[],
+        plantTemplate: Plant,
+        plantBase: Plant,
+        valueAccept?: { column: number; value: string }
+    ) {
         headersTemplate.map(header => {
             if (typeof plantTemplate.table[0] == 'undefined') {
                 plantTemplate.table.push([])
             }
 
-            plantTemplate.table[0][header.column] = header.name
+            plantTemplate.table[0][header.column] = header.name || ''
         })
 
         for (let i = 1; i < plantBase.table.length; i++) {
-            headersTemplate.map(header => {
-                if (typeof plantTemplate.table[i] == 'undefined') {
-                    plantTemplate.table.push([])
+            if (typeof valueAccept != 'undefined') {
+                if (valueAccept.value != plantBase.table[i][valueAccept.column]) {
+                    continue
                 }
+            }
 
+            if (typeof plantTemplate.table[i] == 'undefined') {
+                plantTemplate.table.push([])
+            }
+
+            headersTemplate.map(header => {
                 if (typeof header.value == 'undefined') {
-                    plantTemplate.table[i][header.column] = typeof header.columnOriginTotal != 'undefined' ? plantBase.table[i][header.columnOriginTotal] : ''
+                    plantTemplate.table[plantTemplate.table.length - 1][header.column] =
+                        typeof header.columnOriginTotal != 'undefined' ? plantBase.table[i][header.columnOriginTotal] || '' : ''
                 } else {
-                    plantTemplate.table[i][header.column] = header.value
+                    plantTemplate.table[plantTemplate.table.length - 1][header.column] = header.value || ''
                 }
             })
         }
@@ -230,7 +297,7 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
         })
     }
 
-    private getHeaderByTypes(headers: HeaderModel[], ...types: HeaderType[]) {
+    private getHeadersByTypes(headers: HeaderModel[], ...types: HeaderType[]) {
         return types
             .map(type => this.headerController.filterHeadersByType(headers, type))
             .reduce(function (resultado, fila) {

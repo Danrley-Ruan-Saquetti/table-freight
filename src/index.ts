@@ -1,15 +1,17 @@
 import { ModelSchema } from './common/repository.js'
 import { FarmController } from './modules/farm/farm.controller.js'
 import { EnumProcess } from './modules/farm/process/constants.js'
+import { FileController } from './modules/file/file.controller.js'
 import { HeaderType } from './modules/header/header.model.js'
-import { Plant, PlantType } from './modules/plant/plant.model.js'
+import { PlantType } from './modules/plant/plant.model.js'
 import { TableController } from './modules/table/table.controller.js'
 import { TABLE_CONTENT_DEADLINE, TABLE_CONTENT_FREIGHT } from './test/table.js'
 
 window.onload = () => {
-    function App() {
+    async function App() {
         const tableController = new TableController()
         const farmController = new FarmController()
+        const fileController = new FileController()
 
         const tableDeadline = tableController.converterStringInTable(TABLE_CONTENT_DEADLINE)
         const tableFreight = tableController.converterStringInTable(TABLE_CONTENT_FREIGHT)
@@ -76,6 +78,24 @@ window.onload = () => {
         )
 
         farmService.perform()
+
+        const files = farmService.getPlants().map(({ table, name }) => {
+            const tableInString = tableController.converterTableInString(table)
+            const file = fileController.createFile({ content: [tableInString] })
+
+            return { file, name: `${name}.csv` }
+        })
+
+        const url = await fileController.createURLDownloadZip(files)
+
+        const tagDownload = document.createElement('a')
+
+        tagDownload.setAttribute('href', url)
+        tagDownload.setAttribute('download', 'Tables Freight.zip')
+
+        tagDownload.innerHTML = 'Download'
+
+        document.body.appendChild(tagDownload)
     }
 
     document.querySelector('button[data-button="get-data"]')?.addEventListener('click', getDataRepository)

@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+        sans-serif;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+input,
+a,
+button,
+textarea {
+    outline: none;
+    border: none;
+    background: transparent;
+    text-decoration: none;
+    color: #e6e6e6;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+body {
+    background-color: #1b1b1b;
+    width: 100vw;
+    height: 100vh;
+    font-size: 1.6rem;
+    overflow: hidden;
+}
+
+body * {
+    color: #e6e6e6;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+    padding: 2rem 3rem;
+}
+
+form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.logo {
+    border-bottom: 0.2rem solid #c4c4c4;
+    padding: 0.1rem 1rem;
+}
+
+.list-content {
+    position: relative;
+    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    margin-block: 2rem;
+}
+
+.list {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+form .group-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: 1rem;
+}
+
+form .group-input .input-prompt {
+    border-bottom: 0.1rem solid #767676;
+    padding: 0.2rem 1rem;
+    font-size: 1.6rem;
+    letter-spacing: 0.1rem;
+    transition: all 0.3s;
+}
+
+form .group-input .input-prompt:hover,
+form .group-input .input-prompt:focus,
+form .group-input .input-prompt:valid,
+form .group-input .input-prompt:active {
+    border-bottom: 0.1rem solid #c4c4c4;
+}
+
+form .form-footer {
+    display: flex;
+    justify-content: end;
+    padding: 2rem 3rem;
+    padding-bottom: 0;
+    border-top: 0.2rem solid #c4c4c4;
+    background-color: #1b1b1b;
+}
+
+.group-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.button-action {
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s;
+}
+
+.button-action[button-action='confirm'] {
+    background-color: #008100;
+}
+
+.button-action[button-action='confirm']:hover {
+    background-color: #006400;
+}
+
+.button-action[button-action='confirm']:active {
+    transform: scale(0.95);
+    background-color: #004d00;
+}
+
+.button-action[button-action='cancel'] {
+    background-color: #880000;
+}
+
+.button-action[button-action='cancel']:hover {
+    background-color: #6b0000;
+}
+
+.button-action[button-action='cancel']:active {
+    transform: scale(0.95);
+    background-color: #530000;
+}
+
+.button-action[button-action='simple'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    width: 3rem;
+    height: 3rem;
+    background-color: #a2a2a2;
+}
+
+.text-red {
+    color: #ff0000;
+}

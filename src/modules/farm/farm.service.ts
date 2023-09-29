@@ -1,10 +1,12 @@
 import { ModelSchema } from '../../common/repository.js'
+import { Document, FindFirstResponse } from '../../lib/repository-memory/index.js'
 import { HeaderModelArgs } from '../header/header.model.js'
 import { PlantController } from '../plant/plant.controller.js'
 import { PlantModelArgs } from '../plant/plant.model.js'
 import { ProcessController } from '../process/process.controller.js'
 import { ProcessService } from '../process/process.service.js'
 import { FarmController } from './farm.controller.js'
+import { FarmModelArgs } from './farm.model.js'
 import { EnumProcess } from './process/constants.js'
 import { ProcessInstance } from './process/index.js'
 import { PreProcess } from './process/pre.process.js'
@@ -74,7 +76,7 @@ export class FarmService {
     }
 
     getFarm() {
-        return this.farmController.findFirst({ where: { id: { equals: this.farmId } } })
+        return this.farmController.findFirst({ where: { id: { equals: this.farmId } } }) as Document<FarmModelArgs>
     }
 
     getPlants() {

@@ -17,7 +17,7 @@ import {
 } from './farm.repository.js'
 import { FarmService } from './farm.service.js'
 import { FarmModelArgs } from './farm.model.js'
-import { EnumProcess, ProcessInstance } from './process/index.js'
+import { EnumProcess } from './process/constants.js'
 import { ProcessController } from '../process/process.controller.js'
 
 export class FarmController {

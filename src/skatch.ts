@@ -42,6 +42,7 @@ async function App() {
             ],
         }
     )
+
     farmService.insertPlant(
         {
             table: tableFarm,
@@ -52,7 +53,7 @@ async function App() {
                 { name: 'CEP FINAL', column: 1, type: HeaderType.ZipCodeFinal },
                 { name: 'TDA', column: 17, type: HeaderType.Rate },
             ],
-        },
+        }
         // {
         //     table: tableDeadline,
         //     name: 'Plant Deadline',

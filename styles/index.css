@@ -71,28 +71,6 @@ form {
     height: 100%;
 }
 
-form .group-input {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding-inline: 1rem;
-}
-
-form .group-input .input-prompt {
-    border-bottom: 0.1rem solid #767676;
-    padding: 0.2rem 1rem;
-    font-size: 1.6rem;
-    letter-spacing: 0.1rem;
-    transition: all 0.3s;
-}
-
-form .group-input .input-prompt:hover,
-form .group-input .input-prompt:focus,
-form .group-input .input-prompt:valid,
-form .group-input .input-prompt:active {
-    border-bottom: 0.1rem solid #c4c4c4;
-}
-
 form .form-footer {
     display: flex;
     justify-content: end;
@@ -100,11 +78,6 @@ form .form-footer {
     padding-bottom: 0;
     border-top: 0.2rem solid #c4c4c4;
     background-color: #1b1b1b;
-}
-
-.group-actions {
-    display: flex;
-    gap: 1rem;
 }
 
 .button-action {
@@ -139,16 +112,11 @@ form .form-footer {
     background-color: #530000;
 }
 
-.button-action[button-action='simple'] {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    width: 3rem;
-    height: 3rem;
-    background-color: #a2a2a2;
-}
-
 .text-red {
     color: #ff0000;
+}
+
+select,
+select option {
+    color: #000;
 }

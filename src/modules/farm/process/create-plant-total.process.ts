@@ -21,12 +21,9 @@ export class CreatePlantTotalProcess extends Process<PerformResult> {
     private readonly farmController: FarmController
     private readonly plantController: PlantController
     private readonly headerController: HeaderController
-    params: ProcessParams[]
 
     constructor(args: ProcessChildrenCreate<PerformResult, ProcessParams>) {
         super({ ...args, type: EnumProcess.CreatePlantTotal, order: 1, name: CreatePlantTotalProcess.ProcessName })
-
-        this.params = args.params || []
 
         this.farmController = new FarmController()
         this.plantController = new PlantController()

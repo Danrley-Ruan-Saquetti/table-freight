@@ -26,6 +26,7 @@ button:hover {
 }
 
 body {
+    position: relative;
     background-color: #1b1b1b;
     width: 100vw;
     height: 100vh;
@@ -119,4 +120,50 @@ form .form-footer {
 select,
 select option {
     color: #000;
+}
+
+.logo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.logo .help-icon {
+    cursor: pointer;
+}
+
+.logo .help-info {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    width: 60%;
+    height: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1b1b1b;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.logo .help-info .help-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo .help-info.enable {
+    display: flex;
+}
+
+.logo .help-content {
+    height: 100%;
+    overflow-y: auto;
+    word-wrap: normal;
+}
+
+.close {
+    cursor: pointer;
 }

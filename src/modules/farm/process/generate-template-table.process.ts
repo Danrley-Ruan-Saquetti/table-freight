@@ -168,7 +168,7 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
 
         valuesRate
             .filter(({ values }) => values)
-            .map(({ name, values, column }) => values.map(value => this.generateTemplateRate(plantTotal, name, value, column)))
+            .map(({ name, values, column }) => values.map(value => value && this.generateTemplateRate(plantTotal, name, value, column)))
     }
 
     private generateTemplateRate(plantTotal: PlantWhithHeaders, name: string, value: string, column: number) {
@@ -260,7 +260,6 @@ export class GenerateTemplateTableProcess extends Process<PerformResult> {
                 tableId: plantTemplate.id,
             })),
         })
-
         this.plantController.update({
             where: {
                 id: { equals: plantTemplate.id },
